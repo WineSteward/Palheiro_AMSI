@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="etEmail" />
+    <string name="etPassword" />
+    <string name="etLogin">Login</string>
+    <string name="txt_titulo">Titulo dinamico</string>
+    <string name="txt_serie">Serie Dinamica</string>
+    <string name="txt_autor">Autor Dinamico</string>
+    <string name="txt_ano">Ano Dinamico</string>
+    <string name="txt_titulo_dinamico" />
+    <string name="txt_serie_dinamico" />
+    <string name="txt_autor_dinamico" />
+    <string name="txt_ano_dinamico" />
+    <string name="txt_menu_lista">Livros (Lista)</string>
+    <string name="txt_menu_grelha">Livros (Grelha)</string>
+    <string name="txt_email">Email</string>
+    <string name="ndOpen">open</string>
+    <string name="ndClose">close</string>
+    <string name="etTitulo">Titulo</string>
+    <string name="etSerie">Serie</string>
+    <string name="etAutor">Autor</string>
+    <string name="etano">Ano</string>
+</resources>

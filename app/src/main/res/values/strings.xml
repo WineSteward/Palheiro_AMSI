@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">Palheiro</string>
+    <string name="etEmail" />
+    <string name="etPassword" />
+    <string name="etLogin">Login</string>
+    <string name="tvEmail">Email do User</string>
+    <string name="txt_titulo">Programar em Android AMSI</string>
+    <string name="txt_serie">Android Saga</string>
+    <string name="txt_autor">Equipa AMSI</string>
+    <string name="txt_ano">2019</string>
+    <string name="txt_titulo_dinamico" />
+    <string name="txt_serie_dinamico" />
+    <string name="txt_autor_dinamico" />
+    <string name="txt_ano_dinamico" />
+    <string name="txt_menu_lista">Livros (Lista)</string>
+    <string name="txt_menu_grelha">Livros (Grelha)</string>
+    <string name="txt_comunicar">Comunicar</string>
+    <string name="txt_email">Email</string>
+    <string name="ndOpen">open</string>
+    <string name="ndClose">close</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="etTitulo">Titulo</string>
+    <string name="etSerie">Serie</string>
+    <string name="etAutor">Autor</string>
+    <string name="etano">Ano</string>
+</resources>
