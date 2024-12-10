@@ -1,4 +1,4 @@
-package com.example.books.modelo;
+package com.example.palheiro.modelo;
 
 import android.content.ContentValues;
 import android.content.Context;

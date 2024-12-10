@@ -1,4 +1,4 @@
-package com.example.books;
+package com.example.palheiro;
 
 import android.os.Bundle;
 
@@ -10,8 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.books.modelo.Livro;
-import com.example.books.modelo.SingletonGestorLivros;
+import com.example.palheiro.modelo.Livro;
+import com.example.palheiro.modelo.SingletonGestorLivros;
 
 
 public class DinamicoFragment extends Fragment {

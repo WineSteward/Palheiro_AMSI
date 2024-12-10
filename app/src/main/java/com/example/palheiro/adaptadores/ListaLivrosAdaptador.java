@@ -1,4 +1,4 @@
-package com.example.books.adaptadores;
+package com.example.palheiro.adaptadores;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -6,20 +6,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.TextView;
 
-import com.example.books.R;
-import com.example.books.modelo.Livro;
+import com.example.palheiro.R;
+import com.example.palheiro.modelo.Livro;
 
 import java.util.ArrayList;
 
-public class GrelhaLivrosAdaptador extends BaseAdapter
+public class ListaLivrosAdaptador extends BaseAdapter
 {
 
     private Context context;
     private LayoutInflater inflater;
     private ArrayList<Livro> livros;
 
-    public GrelhaLivrosAdaptador(Context context, ArrayList<Livro> livros) {
+    public ListaLivrosAdaptador(Context context, ArrayList<Livro> livros) {
         this.context = context;
         this.livros = livros;
     }
@@ -39,8 +40,10 @@ public class GrelhaLivrosAdaptador extends BaseAdapter
         return livros.get(i).getId();
     }
 
-    @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
+    @Override //por cada livro este metodo é executado
+    public View getView(int i, View view, ViewGroup viewGroup)
+    {
+
         //carregar o layout e depois todos os livros que fazem parte da lista
 
         if(inflater == null)
@@ -52,14 +55,14 @@ public class GrelhaLivrosAdaptador extends BaseAdapter
         if(view == null)
         {
             //carregar o layout com o inflater
-            view = inflater.inflate(R.layout.item_grelha_livro, null);
+            view = inflater.inflate(R.layout.item_lista_livro, null);
         }
 
         //carregar os dados dos livros, se já tem os ids das componentes entao nao os volta a inicializar
-        ViewHolderGrelha viewHolder = (ViewHolderGrelha) view.getTag();
+        ViewHolderLista viewHolder = (ViewHolderLista) view.getTag();
         if(viewHolder == null)
         {
-            viewHolder = new ViewHolderGrelha(view);
+            viewHolder = new ViewHolderLista(view);
             view.setTag(viewHolder);
         }
 
@@ -69,24 +72,42 @@ public class GrelhaLivrosAdaptador extends BaseAdapter
         return view;
     }
 
-
-
     //classe auxiliar interna
-    private class ViewHolderGrelha
+    private class ViewHolderLista
     {
-        private ImageView imgCapaItemGrelha;
+        private ImageView imgCapa;
+        private TextView tvTitulo, tvSeries, tvAutor, tvAno;
 
         //contrutor
-        public ViewHolderGrelha(View view)
+        public ViewHolderLista(View view)
         {
-            imgCapaItemGrelha = view.findViewById(R.id.imgCapaItemGrelha);
+            tvTitulo = view.findViewById(R.id.tvTitulo);
+            tvSeries = view.findViewById(R.id.tvSerie);
+            tvAutor = view.findViewById(R.id.tvAutor);
+            tvAno = view.findViewById(R.id.tvAno);
+            imgCapa = view.findViewById(R.id.imgCapa);
         }
 
 
         public void update(Livro livro)
         {
-            imgCapaItemGrelha.setImageResource(livro.getCapa());
+            tvTitulo.setText(livro.getTitulo());
+            tvSeries.setText(livro.getSerie());
+            tvAutor.setText(livro.getAutor());
+            tvAno.setText(livro.getAno() + "");
+            imgCapa.setImageResource(livro.getCapa());
         }
     }
 
+
 }
+
+
+
+
+
+
+
+
+
+

@@ -1,4 +1,4 @@
-package com.example.books;
+package com.example.palheiro;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -19,9 +19,9 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
-import com.example.books.adaptadores.ListaLivrosAdaptador;
-import com.example.books.modelo.Livro;
-import com.example.books.modelo.SingletonGestorLivros;
+import com.example.palheiro.adaptadores.ListaLivrosAdaptador;
+import com.example.palheiro.modelo.Livro;
+import com.example.palheiro.modelo.SingletonGestorLivros;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.example.books;
+package com.example.palheiro;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,9 +11,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
-import com.example.books.adaptadores.GrelhaLivrosAdaptador;
-import com.example.books.modelo.Livro;
-import com.example.books.modelo.SingletonGestorLivros;
+import com.example.palheiro.adaptadores.GrelhaLivrosAdaptador;
+import com.example.palheiro.modelo.Livro;
+import com.example.palheiro.modelo.SingletonGestorLivros;
 
 import java.util.ArrayList;
 

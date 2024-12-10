@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.books"
+    namespace = "com.example.palheiro"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.books"
+        applicationId = "com.example.palheiro"
         minSdk = 26
         targetSdk = 34
         versionCode = 1

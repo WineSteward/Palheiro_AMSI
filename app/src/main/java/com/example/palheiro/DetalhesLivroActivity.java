@@ -1,4 +1,4 @@
-package com.example.books;
+package com.example.palheiro;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -13,8 +13,9 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.books.modelo.Livro;
-import com.example.books.modelo.SingletonGestorLivros;
+import com.example.palheiro.R;
+import com.example.palheiro.modelo.Livro;
+import com.example.palheiro.modelo.SingletonGestorLivros;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class DetalhesLivroActivity extends AppCompatActivity {

@@ -11,29 +11,32 @@
     <Space
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_weight="0.1"/>
+        android:layout_weight="0.3"/>
 
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
-        android:layout_height="500px"
-        app:srcCompat="@drawable/logoipl" />
+        android:layout_height="166dp"
+        android:layout_gravity="center"
+        app:srcCompat="@drawable/palheiro_logo" />
 
     <Space
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_weight="0.1"
+        android:layout_weight="0.3"
         />
 
     <EditText
         android:id="@+id/etEmail"
-        android:layout_width="match_parent"
+        android:layout_gravity="center"
+        android:layout_width="300dp"
+        android:textAlignment="center"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="text"
+        android:inputType="textEmailAddress"
         android:text="@string/etEmail"
-        android:hint="Introduza o seu email"/>
+        android:hint="@string/email_hint"/>
 
     <Space
         android:layout_width="wrap_content"
@@ -43,24 +46,35 @@
 
     <EditText
         android:id="@+id/etPassword"
-        android:layout_width="match_parent"
+        android:layout_gravity="center"
+        android:layout_width="300dp"
+        android:textAlignment="center"
         android:layout_height="wrap_content"
         android:ems="10"
         android:text="@string/etPassword"
-        android:hint="Introduza a password"
+        android:hint="@string/password_hint"
         android:inputType="textPassword" />
 
     <Space
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_weight="0.4"
+        android:layout_weight="0.2"
         />
     <Button
-        android:id="@+id/button2"
-        android:layout_width="match_parent"
+        android:id="@+id/loginBtn"
+        android:layout_gravity="center"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:text="@string/etLogin"
         android:onClick="onClickLogin"
+        />
+    <Button
+        android:id="@+id/signInBtn"
+        android:layout_gravity="center"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:text="@string/etSignIn"
+        android:onClick="onClickRedirectSignIn"
         />
 
     <Space
@@ -68,4 +82,5 @@
         android:layout_height="0dp"
         android:layout_weight="0.1"
         />
+
 </LinearLayout>

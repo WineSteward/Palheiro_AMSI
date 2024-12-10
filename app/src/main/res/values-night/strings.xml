@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">Palheiro</string>
     <string name="etEmail" />
     <string name="etPassword" />
     <string name="etLogin">Login</string>
-    <string name="txt_titulo">Titulo dinamico</string>
-    <string name="txt_serie">Serie Dinamica</string>
-    <string name="txt_autor">Autor Dinamico</string>
-    <string name="txt_ano">Ano Dinamico</string>
+    <string name="tvEmail">Email do User</string>
+    <string name="txt_titulo">Programar em Android AMSI</string>
+    <string name="txt_serie">Android Saga</string>
+    <string name="txt_autor">Equipa AMSI</string>
+    <string name="txt_ano">2019</string>
     <string name="txt_titulo_dinamico" />
     <string name="txt_serie_dinamico" />
     <string name="txt_autor_dinamico" />
     <string name="txt_ano_dinamico" />
     <string name="txt_menu_lista">Livros (Lista)</string>
     <string name="txt_menu_grelha">Livros (Grelha)</string>
+    <string name="txt_comunicar">Comunicar</string>
     <string name="txt_email">Email</string>
     <string name="ndOpen">open</string>
     <string name="ndClose">close</string>
@@ -20,4 +23,12 @@
     <string name="etSerie">Serie</string>
     <string name="etAutor">Autor</string>
     <string name="etano">Ano</string>
+    <string name="email_hint">Introduza o seu email</string>
+    <string name="password_hint">Introduza a password</string>
+    <string name="etSignIn">Sign In</string>
+    <string name="etCodigoPostal">Introduza o seu código postal</string>
+    <string name="etMorada2">Use se necessário para a morada</string>
+    <string name="etMorada">Introduza a sua morada</string>
+    <string name="etNIF">Introduza o seu NIF</string>
+    <string name="etUsername">Introduza o username</string>
 </resources>
