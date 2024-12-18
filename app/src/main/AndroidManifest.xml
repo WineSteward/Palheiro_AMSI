@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -11,10 +14,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Palheiro"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
-
+        <activity
+            android:name=".DetalhesListaComprasActivity"
+            android:exported="false"
+            android:parentActivityName=".MenuMainActivity"/>
         <activity
             android:name=".DetalhesLivroActivity"
+            android:exported="false"
+            android:parentActivityName=".MenuMainActivity" />
+        <activity
+            android:name=".DetalhesProdutoActivity"
             android:exported="false"
             android:parentActivityName=".MenuMainActivity" />
         <activity
@@ -28,8 +39,8 @@
             android:parentActivityName=".LoginActivity" />
         <activity
             android:name=".LoginActivity"
-            android:launchMode="singleTop"
-            android:exported="true">
+            android:exported="true"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

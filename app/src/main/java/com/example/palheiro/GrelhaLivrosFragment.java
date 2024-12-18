@@ -13,7 +13,7 @@ import android.widget.GridView;
 
 import com.example.palheiro.adaptadores.GrelhaLivrosAdaptador;
 import com.example.palheiro.modelo.Livro;
-import com.example.palheiro.modelo.SingletonGestorLivros;
+import com.example.palheiro.modelo.SingletonPalheiro;
 
 import java.util.ArrayList;
 
@@ -35,7 +35,7 @@ public class GrelhaLivrosFragment extends Fragment {
 
         gvLivros = view.findViewById(R.id.gvLivros);
 
-        livros = SingletonGestorLivros.getInstance(getContext()).getLivrosBD(); //traz o array de livros
+        livros = SingletonPalheiro.getInstance(getContext()).getLivrosBD(); //traz o array de livros
 
         gvLivros.setAdapter(new GrelhaLivrosAdaptador(getContext(), livros));
 

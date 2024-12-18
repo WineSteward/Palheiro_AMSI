@@ -14,12 +14,16 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.palheiro.listeners.AuthListener;
+import com.example.palheiro.modelo.SingletonPalheiro;
+
 import java.util.Objects;
 import java.util.regex.Pattern;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements AuthListener {
 
     public static final String EMAIL = "Email";
+    private String txtEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -44,7 +48,7 @@ public class LoginActivity extends AppCompatActivity {
         EditText etEmail = findViewById(R.id.etEmail);
         EditText etPassword = findViewById(R.id.etPassword);
 
-        String txtEmail = etEmail.getText().toString();
+        txtEmail = etEmail.getText().toString();
         String txtPassword = etPassword.getText().toString();
 
 
@@ -55,12 +59,8 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        Toast.makeText(this, "Login realizado com sucecsso", Toast.LENGTH_SHORT).show();
 
-        Intent intent = new Intent(this, MenuMainActivity.class);
-        intent.putExtra(EMAIL, txtEmail);
-        startActivity(intent);
-        finish(); //impossivel retornar a esta atividade
+        SingletonPalheiro.getInstance(getApplicationContext()).loginAPI(getApplicationContext(), txtEmail, txtPassword);
     }
 
     public void onClickRedirectSignIn(View view)
@@ -83,6 +83,18 @@ public class LoginActivity extends AppCompatActivity {
         return pattern.matcher(email).matches();
     }
 
+    @Override
+    public void onUpdateLogin(String token)
+    {
+        //guardar o token no shared pref
+
+        Toast.makeText(this, "Login realizado com sucecsso", Toast.LENGTH_SHORT).show();
+
+        Intent intent = new Intent(this, MenuMainActivity.class);
+        intent.putExtra(EMAIL, txtEmail);
+        startActivity(intent);
+        finish(); //impossivel retornar a esta atividade
+    }
 }
 
 

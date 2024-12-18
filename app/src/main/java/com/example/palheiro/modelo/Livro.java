@@ -2,11 +2,11 @@ package com.example.palheiro.modelo;
 
 public class Livro
 {
-    private int id, ano, capa;
-    private String titulo, serie, autor;
+    private int id, ano;
+    private String capa, titulo, serie, autor;
     private static int autoIncrementId = 1;
 
-    public Livro(int id, int capa, int ano, String titulo, String serie, String autor)
+    public Livro(int id, String capa, int ano, String titulo, String serie, String autor)
     {
 
         this.id = id;
@@ -31,11 +31,11 @@ public class Livro
         this.ano = ano;
     }
 
-    public int getCapa() {
+    public String getCapa() {
         return capa;
     }
 
-    public void setCapa(int capa) {
+    public void setCapa(String capa) {
         this.capa = capa;
     }
 

@@ -21,13 +21,13 @@ import android.widget.Toast;
 
 import com.example.palheiro.adaptadores.ListaLivrosAdaptador;
 import com.example.palheiro.modelo.Livro;
-import com.example.palheiro.modelo.SingletonGestorLivros;
+import com.example.palheiro.modelo.SingletonPalheiro;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
 
-public class ListaLivrosFragment extends Fragment {
+public class ListaLivrosFragment extends Fragment implements LivrosListener{
 
     private ListView lvLivros;
     private ArrayList<Livro> livros;
@@ -50,7 +50,7 @@ public class ListaLivrosFragment extends Fragment {
 
         lvLivros = view.findViewById(R.id.lvLivros);
 
-        livros = SingletonGestorLivros.getInstance(getContext()).getLivrosBD(); //traz o array de livros
+        livros = SingletonPalheiro.getInstance(getContext()).getLivrosBD(); //traz o array de livros
 
         lvLivros.setAdapter(new ListaLivrosAdaptador(getContext(), livros));
 
@@ -92,7 +92,7 @@ public class ListaLivrosFragment extends Fragment {
             //Algo aconteceu, temos de atualizar a lista
 
             //variavel do modelo NESTE fragment atualizada
-            livros = SingletonGestorLivros.getInstance(getContext()).getLivrosBD();
+            livros = SingletonPalheiro.getInstance(getContext()).getLivrosBD();
 
             //listView atualizada
             lvLivros.setAdapter(new ListaLivrosAdaptador(getContext(), livros));
@@ -122,7 +122,7 @@ public class ListaLivrosFragment extends Fragment {
             public boolean onQueryTextChange(String query) {
                 ArrayList<Livro> tempLivros = new ArrayList<>();
 
-                for (Livro livro : SingletonGestorLivros.getInstance(getContext()).getLivrosBD())
+                for (Livro livro : SingletonPalheiro.getInstance(getContext()).getLivrosBD())
                 {
                     if(livro.getTitulo().toLowerCase().contains(query.toLowerCase()))
                         tempLivros.add(livro);
@@ -133,6 +133,15 @@ public class ListaLivrosFragment extends Fragment {
                 return true;
             }
         });
+    }
+
+    @Override
+    public void onRefreshListaLivros(ArrayList<Livro> listaLivros
+    {
+        if(listaLivros != null)
+        {
+            lvLivros.setAdapter(new ListaLivrosAdaptador(getContext(), listaLivros));
+        }
     }
 }
 

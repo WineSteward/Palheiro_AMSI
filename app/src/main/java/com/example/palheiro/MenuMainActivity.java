@@ -113,6 +113,13 @@ public class MenuMainActivity extends AppCompatActivity implements  NavigationVi
             setTitle(item.getTitle());
 
         }
+        else if(item.getItemId()== R.id.navProdutos)
+        {
+            fragment = new ListaProdutosFragment();
+
+            setTitle(item.getTitle());
+
+        }
         //TODO ADD MAIS ELSE IF PARA CADA ITEM NO MENU LATERAL
         else
         {

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="#FFFFFF"
+    tools:context=".DetalhesProdutoActivity">
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.02" />
+
+    <ImageView
+        android:id="@+id/ivProdutoDetalhes"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.3"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.02" />
+
+    <TextView
+        android:id="@+id/tvNomeProdutoDetalhes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:text="@string/txtNomeDetalhes"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.02" />
+
+    <TextView
+        android:id="@+id/tvDescricaoDetalhes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/txtDescricaoTituloDetalhes"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="4dp" />
+
+    <TextView
+        android:id="@+id/tvDescricaoProdutoDetalhes"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.2"
+        android:text="@string/txtDescricaoDetalhes"
+        android:textSize="16sp"
+        android:layout_marginBottom="8dp" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.02" />
+
+    <TextView
+        android:id="@+id/tvPrecoProdutoDetalhes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:text="@string/txtPrecoDetalhes"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.02" />
+
+    <Button
+        android:id="@+id/btnAddCarrinho"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/txtaddCarrinho"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:onClick="onClickAddCarrinho"
+        android:layout_gravity="center" />
+
+</LinearLayout>

@@ -12,6 +12,10 @@
         <item android:title="@string/txt_menu_grelha"
             android:id="@+id/navGrelha"
             android:icon="@drawable/ic_action_grelha"/>
+
+        <item android:title="@string/txt_menu_produtos"
+            android:id="@+id/navProdutos"
+            android:icon="@drawable/ic_action_produtos"/>
     </group>
 
 

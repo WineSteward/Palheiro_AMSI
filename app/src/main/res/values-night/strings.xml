@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Palheiro</string>
     <string name="etEmail" />
@@ -31,4 +30,32 @@
     <string name="etMorada">Introduza a sua morada</string>
     <string name="etNIF">Introduza o seu NIF</string>
     <string name="etUsername">Introduza o username</string>
+    <string name="nomeProdutoLista">Nome do Produto</string>
+    <string name="precoProdutoLista">Preço do Produto</string>
+    <string name="marcaProdutoLista">Marca do Produto</string>
+    <string name="addProdutoLista">Add</string>
+    <string name="txt_menu_produtos">Produtos</string>
+    <string name="txtaddCarrinho">Adicionar ao Carrinho</string>
+    <string name="txtPrecoDetalhes">Preço</string>
+    <string name="txtDescricaoDetalhes">Detalhes do Produto Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</string>
+    <string name="txtDescricaoTituloDetalhes">Descrição:</string>
+    <string name="txtNomeDetalhes">Nome do Produto</string>
+    <string name="txtFabGuardar">Guardar</string>
+    <string name="txtListaComprasDetalhes">Elabore a sua própria lista de compras!</string>
+    <string name="txtTituloDetalhes">Titulo</string>
+    <string name="txtTituloListaCompraItem">Titulo da Lista de Compra</string>
+    <string name="txtFabAdicionar">Adicionar</string>
+    <string name="txtNomeItemCarrinho">Nome do produto</string>
+    <string name="txtMarcaItemCarrinho">Marca do produto</string>
+    <string name="txtLabelQuantidadeItemCarrinho">Quantidade:</string>
+    <string name="txtQuantidadeItemCarrinho">10</string>
+    <string name="txtLabelTotalItemCarrinho">Total:</string>
+    <string name="txtTotalItemCarrinho">10€</string>
+    <string name="txtAddItemCarrinho">+</string>
+    <string name="txtSubItemCarrinho">-</string>
+    <string name="txtLabelMetodoPagamento">Selecione o Método de Pagamento</string>
+    <string name="txtLabelMetodoExpedicao">Selecione o Método de Expedção</string>
+    <string name="txtLabelCupao">Cupão:</string>
+    <string name="txtHintCupao">codigoCupao2025</string>
+    <string name="txtBtnComprar">Concluir Compra</string>
 </resources>

@@ -13,27 +13,30 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.palheiro.R;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.palheiro.modelo.Livro;
-import com.example.palheiro.modelo.SingletonGestorLivros;
+import com.example.palheiro.modelo.SingletonPalheiro;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class DetalhesLivroActivity extends AppCompatActivity {
 
     public static final String ID = "ID";
+    public static final String DEFAULT_IMG = "default_imgURL";
     private FloatingActionButton fabDetalhes;
     private ImageView imgCapaDetalhes;
     private EditText etTitulo, etAutor, etSerie, etAno;
     private Livro livro;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalhes_livro);
 
         int id = getIntent().getIntExtra(ID, -1); //ir buscar o conteudo da const ID e dar um default value
-        livro = SingletonGestorLivros.getInstance(getApplicationContext()).getLivro(id);
+        livro = SingletonPalheiro.getInstance(getApplicationContext()).getLivro(id);
 
 
         imgCapaDetalhes = findViewById(R.id.imgCapaDetalhes);
@@ -60,19 +63,19 @@ public class DetalhesLivroActivity extends AppCompatActivity {
                         livro.setAutor(etAutor.getText().toString());
                         livro.setAno(Integer.parseInt(etAno.getText().toString()));
 
-                        SingletonGestorLivros.getInstance(getApplicationContext()).editarLivroBD(livro);
+                        SingletonPalheiro.getInstance(getApplicationContext()).editLivroBD(livro);
 
                     }
                     else // --> adicionar livro
                     {
                         livro = new Livro(0,
-                                R.drawable.programarandroid2,
+                                DEFAULT_IMG,
                                 Integer.parseInt(etAno.getText().toString()),
                                 etTitulo.getText().toString(),
                                 etSerie.getText().toString(),
                                 etAutor.getText().toString());
 
-                        SingletonGestorLivros.getInstance(getApplicationContext()).adicionarLivroBD(livro);
+                        SingletonPalheiro.getInstance(getApplicationContext()).addLivroBD(livro);
 
                     }
                     setResult(Activity.RESULT_OK);
@@ -109,11 +112,15 @@ public class DetalhesLivroActivity extends AppCompatActivity {
 
     private void carregarLivro() {
         setTitle("Detalhes:" + livro.getTitulo());
-        imgCapaDetalhes.setImageResource(livro.getCapa());
+//        imgCapaDetalhes.setImageResource(livro.getCapa());
         etTitulo.setText(livro.getTitulo());
         etSerie.setText(livro.getSerie());
         etAutor.setText(livro.getAutor());
         etAno.setText(livro.getAno() + "");
+        Glide.with(getApplicationContext())
+                .load(livro.getCapa())
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(imgCapaDetalhes);
     }
 
     //carregar o menu
@@ -145,7 +152,7 @@ public class DetalhesLivroActivity extends AppCompatActivity {
                 .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        SingletonGestorLivros.getInstance(getApplicationContext()).removerLivroBD(livro.getId());
+                        SingletonPalheiro.getInstance(getApplicationContext()).deleteLivroBD(livro.getId());
 
                         setResult(Activity.RESULT_OK);
                         finish();
