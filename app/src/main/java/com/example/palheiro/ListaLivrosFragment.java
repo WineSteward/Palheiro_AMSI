@@ -136,7 +136,7 @@ public class ListaLivrosFragment extends Fragment implements LivrosListener{
     }
 
     @Override
-    public void onRefreshListaLivros(ArrayList<Livro> listaLivros
+    public void onRefreshListaLivros(ArrayList<Livro> listaLivros)
     {
         if(listaLivros != null)
         {

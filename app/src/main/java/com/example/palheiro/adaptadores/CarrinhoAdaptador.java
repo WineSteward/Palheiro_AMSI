@@ -48,7 +48,7 @@ public class CarrinhoAdaptador extends BaseAdapter
     public View getView(int i, View view, ViewGroup viewGroup)
     {
 
-        //carregar o layout e depois todos os produtos que fazem parte da lista
+        //carregar o layout e depois todos as linhas do carrinho que fazem parte do carrinho
 
         if(inflater == null)
         {

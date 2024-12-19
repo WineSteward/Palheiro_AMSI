@@ -15,15 +15,19 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 
 import com.example.palheiro.adaptadores.CarrinhoAdaptador;
+import com.example.palheiro.listeners.CarrinhoListener;
 import com.example.palheiro.listeners.CupaoValidationListener;
+import com.example.palheiro.listeners.MetodosExpedicaoListener;
+import com.example.palheiro.listeners.MetodosPagamentoListener;
 import com.example.palheiro.modelo.Carrinho;
+import com.example.palheiro.modelo.LinhaCarrinho;
 import com.example.palheiro.modelo.MetodoExpedicao;
 import com.example.palheiro.modelo.MetodoPagamento;
 import com.example.palheiro.modelo.SingletonPalheiro;
 
 import java.util.ArrayList;
 
-public class CarrinhoFragment extends Fragment {
+public class CarrinhoFragment extends Fragment implements CarrinhoListener, MetodosExpedicaoListener, MetodosPagamentoListener {
 
     private Carrinho carrinho;
     private ArrayList<MetodoPagamento> metodosPagamento;
@@ -44,21 +48,35 @@ public class CarrinhoFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_carrinho, container, false);
 
-        // Initialize UI components
+        setHasOptionsMenu(true);
+
         lvCarrinho = view.findViewById(R.id.lvCarrinho);
+
+        //set de todos os listeners necessarios
+
+        SingletonPalheiro.getInstance(getContext()).setCarrinhoListener(this);
+        SingletonPalheiro.getInstance(getContext()).setMetodosPagamentoListener(this);
+        SingletonPalheiro.getInstance(getContext()).setMetodosExpedicaoListener(this);
+
+        //fazer pedidos a API
+        SingletonPalheiro.getInstance(getContext()).getCarrinhoAPI(getContext());
+        SingletonPalheiro.getInstance(getContext()).getMetodosExpedicaoAPI(getContext());
+        SingletonPalheiro.getInstance(getContext()).getMetodosPagamentoAPI(getContext());
+
+        //apos pedido feito com sucesso vamos executar o onRefresh method com o listener automaticamente
+
+        /* adaptador com eles
         spinnerMetodosPagamento = view.findViewById(R.id.spinnerMetodosPagamento);
         spinnerMetodosExpedicao = view.findViewById(R.id.spinnerMetodosExpedicao);
         btnComprar = view.findViewById(R.id.btnComprar);
         etCupao = view.findViewById(R.id.etCupao);
+        */
 
         // Fetch data from Singleton
-        SingletonPalheiro.getInstance(getContext()).getCarrinhoAPI(getContext());
         carrinho = SingletonPalheiro.getInstance(getContext()).getCarrinho();
 
-        SingletonPalheiro.getInstance(getContext()).getMetodosExpedicaoAPI(getContext());
         metodosExpedicao = SingletonPalheiro.getInstance(getContext()).getMetodosExpedicao();
 
-        SingletonPalheiro.getInstance(getContext()).getMetodosPagamentoAPI(getContext());
         metodosPagamento = SingletonPalheiro.getInstance(getContext()).getMetodosPagamento();
 
         lvCarrinho.setAdapter(new CarrinhoAdaptador(getContext(), carrinho.getLinhasCarrinho()));
@@ -127,15 +145,35 @@ public class CarrinhoFragment extends Fragment {
         return view;
     }
 
-    private void setupSpinners(Context context) {
-
-        ArrayAdapter<MetodoPagamento> MetodoPagamentoAdaptador = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, metodosPagamento);
-        MetodoPagamentoAdaptador.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerMetodosPagamento.setAdapter(MetodoPagamentoAdaptador);
+    private void setupSpinners(Context context)
+    {
 
 
+
+
+
+    }
+
+    @Override
+    public void onRefreshCarrinho(ArrayList<LinhaCarrinho> linhasCarrinho)
+    {
+        if(linhasCarrinho != null)
+            lvCarrinho.setAdapter(new CarrinhoAdaptador(getContext(), linhasCarrinho));
+    }
+
+    @Override
+    public void onRefreshMetodosExpedicao(ArrayList<MetodoExpedicao> metodosExpedicao, Context context)
+    {
         ArrayAdapter<MetodoExpedicao> MetodoExpedicaoAdaptador = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, metodosExpedicao);
         MetodoExpedicaoAdaptador.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerMetodosExpedicao.setAdapter(MetodoExpedicaoAdaptador);
+    }
+
+    @Override
+    public void onRefreshMetodosPagamento(ArrayList<MetodoPagamento> metodosPagamento, Context context)
+    {
+        ArrayAdapter<MetodoPagamento> MetodoPagamentoAdaptador = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, metodosPagamento);
+        MetodoPagamentoAdaptador.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerMetodosPagamento.setAdapter(MetodoPagamentoAdaptador);
     }
 }

@@ -7,7 +7,6 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -19,13 +18,17 @@ import com.android.volley.toolbox.Volley;
 import com.example.palheiro.ListasComprasFragment;
 import com.example.palheiro.listeners.CarrinhoListener;
 import com.example.palheiro.listeners.CupaoValidationListener;
+import com.example.palheiro.listeners.EncomendasListener;
 import com.example.palheiro.listeners.ListaComprasListener;
 import com.example.palheiro.listeners.ListasComprasListener;
 import com.example.palheiro.listeners.AuthListener;
+import com.example.palheiro.listeners.MetodosExpedicaoListener;
+import com.example.palheiro.listeners.MetodosPagamentoListener;
 import com.example.palheiro.listeners.ProdutoListener;
 import com.example.palheiro.listeners.ProdutosListener;
 import com.example.palheiro.utils.AuthJsonParser;
 import com.example.palheiro.utils.CarrinhoJsonParser;
+import com.example.palheiro.utils.EncomendaJsonParser;
 import com.example.palheiro.utils.FaturaJsonParser;
 import com.example.palheiro.utils.ListaComprasJsonParser;
 import com.example.palheiro.utils.MetodoExpedicaoJsonParser;
@@ -49,6 +52,7 @@ public class SingletonPalheiro
 
     private static SingletonPalheiro instance = null;
 
+    private ArrayList<Fatura> encomendas;
     private ArrayList<MetodoExpedicao> metodosExpedicao;
     private ArrayList<MetodoPagamento> metodosPagamento;
     private ArrayList<Produto> produtos;
@@ -57,26 +61,29 @@ public class SingletonPalheiro
 
     private static final String IP = "172.22.21.209"; //IP do servidor
     //region - API endpoits
-    public static final String mURLAPIProdutos = IP + "/palheiro/backend/web/api/produtos";
+    public static final String mURLAPIProdutos = IP + "/palheiro/backend/web/api/produto";
     public static final String mURLAPIProdutoImage = IP + "/palheiro/backend/web/image/products&imageName=";
     public static final String mURLAPILogin = IP + "/palheiro/backend/web/api/login";
     public static final String mURLAPIListaCompras = IP + "/palheiro/backend/web/api/listaCompras";
     public static final String mURLAPICarrinho = IP + "/palheiro/backend/web/api/carrinho";
     public static final String mURLAPIFaturas = IP + "/palheiro/backend/web/api/fatura";
-    public static final String mURLAPICupoes = IP + "/palheiro/backend/web/api/cupoes";
-    public static final String mURLAPIMetodosPagamento = IP + "/palheiro/backend/web/api/metodosPagamento";
-    public static final String mURLAPIMetodosExpedicao = IP + "/palheiro/backend/web/api/metodosExpedicao";
+    public static final String mURLAPICupoes = IP + "/palheiro/backend/web/api/cupao";
+    public static final String mURLAPIMetodosPagamento = IP + "/palheiro/backend/web/api/metodoPagamento";
+    public static final String mURLAPIMetodosExpedicao = IP + "/palheiro/backend/web/api/metodoExpedicao";
+    public static final String mURLAPIEncomendas = IP + "palheiro/backend/web/api/encomenda";
 
     //endregion
     private static RequestQueue volleyQueue = null;
     private static final String TOKEN = "Receive token from successful api call to login";
 
-
+    private EncomendasListener encomendasListener;
     private CarrinhoListener carrinhoListener;
     private ProdutosListener produtosListener;
     private ProdutoListener produtoListener;
     private ListaComprasListener listaComprasListener;
     private ListasComprasListener listasComprasListener;
+    private MetodosPagamentoListener metodosPagamentoListener;
+    private MetodosExpedicaoListener metodosExpedicaoListener;
 
     private AuthListener authListener;
 
@@ -101,6 +108,21 @@ public class SingletonPalheiro
     }
 
     //region - set Listeners
+
+    public void setMetodosExpedicaoListener(MetodosExpedicaoListener metodosExpedicaoListener)
+    {
+        this.metodosExpedicaoListener = metodosExpedicaoListener;
+    }
+
+    public void setMetodosPagamentoListener(MetodosPagamentoListener metodosPagamentoListener)
+    {
+        this.metodosPagamentoListener = metodosPagamentoListener;
+    }
+
+    public void setEncomendasListener(EncomendasListener encomendasListener)
+    {
+        this.encomendasListener = encomendasListener;
+    }
 
     public void setCarrinhoListener(CarrinhoListener carrinhoListener)
     {
@@ -494,9 +516,9 @@ public class SingletonPalheiro
                     }
                 }, new Response.ErrorListener() {
                     @Override
-                    public void onErrorResponse(VolleyError error) {
+                    public void onErrorResponse(VolleyError error)
+                    {
                         Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
-
                     }
                 })
                 {
@@ -560,7 +582,7 @@ public class SingletonPalheiro
 
     //endregion
 
-    //region  - Carrinho/Fatura Access
+    //region  - Carrinho/Post Fatura
     public void getCarrinhoAPI(final Context context)
     {
         if(!isConnectionInternet(context))
@@ -582,7 +604,7 @@ public class SingletonPalheiro
                     //atualizar a vista
                     if(carrinhoListener != null)
                     {
-                        carrinhoListener.onRefreshCarrinho(carrinho);
+                        carrinhoListener.onRefreshCarrinho(carrinho.getLinhasCarrinho());
                     }
                 }
             }, new Response.ErrorListener() {
@@ -657,6 +679,55 @@ public class SingletonPalheiro
 
     //endregion
 
+    //region - Encomenda
+
+    public void getAllEncomendasAPI(final Context context)
+    {
+        if(! isConnectionInternet(context))
+        {
+            //nao tem ligacao a internet
+            Toast.makeText(context, "Sem Internet", Toast.LENGTH_SHORT).show();
+
+        }
+        else
+        {
+            JsonArrayRequest reqSelect = new JsonArrayRequest(Request.Method.GET, mURLAPIEncomendas, null, new Response.Listener<JSONArray>() {
+                @Override
+                public void onResponse(JSONArray response)
+                {
+                    //handle success call to API
+
+                    encomendas = EncomendaJsonParser.parserJsonEncomendas(response);
+
+                    //atualizar a vista
+                    if(encomendasListener != null)
+                    {
+                        encomendasListener.onRefreshEncomendas(encomendas);
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
+
+                }
+            })
+            {
+                @Nullable
+                @Override
+                protected Map<String, String> getParams()
+                {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("token", TOKEN);
+                    return params;
+                }
+            };
+            volleyQueue.add(reqSelect);
+        }
+    }
+
+    //endregion
+
     //region - Metodos Pagamento
     public void getMetodosPagamentoAPI(final Context context)
     {
@@ -668,6 +739,12 @@ public class SingletonPalheiro
 
                     //handle success call to API
                     metodosPagamento = MetodoPagamentoJsonParser.parserJsonMetodoPagamento(response);
+
+                    //atualizar a vista
+                    if(metodosPagamentoListener != null)
+                    {
+                        metodosPagamentoListener.onRefreshMetodosPagamento(metodosPagamento, context);
+                    }
 
                 }
             }, new Response.ErrorListener() {
@@ -703,6 +780,12 @@ public class SingletonPalheiro
                     //handle success call to API
                     metodosExpedicao = MetodoExpedicaoJsonParser.parserJsonMetodoExpedicao(response);
 
+                    //atualizar a vista
+                    if(metodosExpedicaoListener != null)
+                    {
+                        metodosExpedicaoListener.onRefreshMetodosExpedicao(metodosExpedicao, context);
+                    }
+
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -732,7 +815,7 @@ public class SingletonPalheiro
 
 
 
-    public void checkCupaoAPI(String cupao, final Context context, final CupaoValidationListener listener)
+    public void checkCupaoAPI(String cupao, final Context context, final CupaoValidationListener cupaoListener)
     {
         if (isConnectionInternet(context))
         {
@@ -741,7 +824,8 @@ public class SingletonPalheiro
                     new Response.Listener<String>()
                     {
                         @Override
-                        public void onResponse(String response) {
+                        public void onResponse(String response)
+                        {
                             try {
                                 // Parse the JSON response
                                 JSONObject responseJson = new JSONObject(response);
@@ -750,11 +834,11 @@ public class SingletonPalheiro
                                 // Notify listener of result
                                 if (Objects.equals(res, "valid"))
                                 {
-                                    listener.onValidationSuccess(true);
+                                    cupaoListener.onValidationSuccess(true);
                                 }
                                 else
                                 {
-                                    listener.onValidationSuccess(false);
+                                    cupaoListener.onValidationSuccess(false);
                                 }
                             }
                             catch (JSONException e)
@@ -766,7 +850,7 @@ public class SingletonPalheiro
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            listener.onValidationFailure("API Error: " + error.getMessage());
+                            cupaoListener.onValidationFailure("API Error: " + error.getMessage());
                         }
                     })
             {

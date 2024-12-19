@@ -58,4 +58,8 @@
     <string name="txtLabelCupao">Cupão:</string>
     <string name="txtHintCupao">codigoCupao2025</string>
     <string name="txtBtnComprar">Concluir Compra</string>
+    <string name="txtEncomendaEstadoItem">Em Preparação</string>
+    <string name="txtLabelEncomendaEstadoItem">Estado:</string>
+    <string name="txtEncomendaDataItem">2024-10-12</string>
+    <string name="txtLabelEncomendaDataItem">Data:</string>
 </resources>
