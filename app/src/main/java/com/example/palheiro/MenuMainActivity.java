@@ -25,7 +25,7 @@ public class MenuMainActivity extends AppCompatActivity implements  NavigationVi
     private NavigationView navigationView;
     private DrawerLayout drawer;
     private FragmentManager fragmentManager;
-    private String email = "sem email";
+    private String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,27 +69,27 @@ public class MenuMainActivity extends AppCompatActivity implements  NavigationVi
 
     private void carregarCabecalho()
     {
-        email = getIntent().getStringExtra(LoginActivity.EMAIL); //ir buscar o conteudo da const EMAIL da activity login
+        username = getIntent().getStringExtra(LoginActivity.USERNAME); //ir buscar o conteudo da const EMAIL da activity login
 
         SharedPreferences sharedPreferences = getSharedPreferences("DADOS_USER", Context.MODE_PRIVATE);
 
-        if(email != null)
+        if(username != null)
         {
            SharedPreferences.Editor editor = sharedPreferences.edit();
 
-           editor.putString("EMAIL", email);
+           editor.putString("USERNAME", username);
            editor.apply();
         }
         else
         {
-            email = sharedPreferences.getString("EMAIL", "Sem Email");
+            username = sharedPreferences.getString("USERNAME", "Sem username");
         }
 
         View hView = navigationView.getHeaderView(0);
 
-        TextView nav_tvEmail = hView.findViewById(R.id.tvEmail);
+        TextView nav_tvUsername = hView.findViewById(R.id.tvUsername);
 
-        nav_tvEmail.setText(email);
+        nav_tvUsername.setText(username);
 
     }
 

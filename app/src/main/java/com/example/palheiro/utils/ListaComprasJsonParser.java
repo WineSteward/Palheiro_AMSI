@@ -42,14 +42,12 @@ public class ListaComprasJsonParser
         return listasCompras;
     }
 
-    public static ListaCompras parserJsonListaCompras(String response)
+    public static ListaCompras parserJsonListaCompras(JSONObject listaComprasJson)
     {
         ListaCompras listaCompras = null;
 
         try
         {
-            JSONObject listaComprasJson = new JSONObject(response);
-
             int id = listaComprasJson.getInt("id");
             String titulo = listaComprasJson.getString("titulo");
             String descricao = listaComprasJson.getString("descricao");

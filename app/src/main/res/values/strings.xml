@@ -62,4 +62,5 @@
     <string name="txtLabelEncomendaEstadoItem">Estado:</string>
     <string name="txtEncomendaDataItem">2024-10-12</string>
     <string name="txtLabelEncomendaDataItem">Data:</string>
+    <string name="txtUsernameLogin">Indique o seu username</string>
 </resources>

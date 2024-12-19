@@ -18,13 +18,17 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.palheiro.adaptadores.CarrinhoAdaptador;
 import com.example.palheiro.listeners.ListaComprasListener;
 import com.example.palheiro.listeners.ListasComprasListener;
 import com.example.palheiro.modelo.ListaCompras;
 import com.example.palheiro.modelo.SingletonPalheiro;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-public class DetalhesListaComprasActivity extends AppCompatActivity implements ListaComprasListener {
+import java.util.ArrayList;
+
+public class DetalhesListaComprasActivity extends AppCompatActivity implements ListaComprasListener
+{
 
     public static final String ID = "ID";
     private FloatingActionButton fab;
@@ -41,7 +45,6 @@ public class DetalhesListaComprasActivity extends AppCompatActivity implements L
         listaCompras = SingletonPalheiro.getInstance(getApplicationContext()).getListaCompras(id);
 
         SingletonPalheiro.getInstance(getApplicationContext()).setListaComprasListener(this);
-
 
         etTitulo = findViewById(R.id.etTituloListaComprasDetalhes);
         etDescricao = findViewById(R.id.etDescricaoListaComprasDetalhes);

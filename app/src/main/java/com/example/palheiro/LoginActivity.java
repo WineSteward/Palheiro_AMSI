@@ -1,6 +1,8 @@
 package com.example.palheiro;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Patterns;
@@ -22,8 +24,8 @@ import java.util.regex.Pattern;
 
 public class LoginActivity extends AppCompatActivity implements AuthListener {
 
-    public static final String EMAIL = "Email";
-    private String txtEmail;
+    public static final String USERNAME = "Username";
+    private String txtUsername;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -45,22 +47,19 @@ public class LoginActivity extends AppCompatActivity implements AuthListener {
     {
         Resources res = getResources();
 
-        EditText etEmail = findViewById(R.id.etEmail);
+        EditText etUsername = findViewById(R.id.etUsername);
         EditText etPassword = findViewById(R.id.etPassword);
 
-        txtEmail = etEmail.getText().toString();
+        txtUsername = etUsername.getText().toString();
         String txtPassword = etPassword.getText().toString();
 
-
-        if(!isEmailValid(txtEmail) || !isPasswordValid(txtPassword))
+        if(!isPasswordValid(txtPassword))
         {
-            etEmail.setError("Formato de email inválido");
             etPassword.setError("Credenciais Incorretas");
             return;
         }
 
-
-        SingletonPalheiro.getInstance(getApplicationContext()).loginAPI(getApplicationContext(), txtEmail, txtPassword);
+        SingletonPalheiro.getInstance(getApplicationContext()).loginAPI(getApplicationContext(), txtUsername, txtPassword);
     }
 
     public void onClickRedirectSignIn(View view)
@@ -77,21 +76,27 @@ public class LoginActivity extends AppCompatActivity implements AuthListener {
         return password.length() >= 4;
     }
 
-    private boolean isEmailValid(String email)
-    {
-        Pattern pattern = Patterns.EMAIL_ADDRESS;
-        return pattern.matcher(email).matches();
-    }
-
     @Override
     public void onUpdateLogin(String token)
     {
+        if(token.isEmpty())
+        {
+            Toast.makeText(this, "Credenciais Incorretas", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         //guardar o token no shared pref
+        SharedPreferences sharedPref = getSharedPreferences("DADOS_USER", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("token", token);
+        editor.apply(); //save assincrono
+        //editor.commit(); // save sincrono
 
         Toast.makeText(this, "Login realizado com sucecsso", Toast.LENGTH_SHORT).show();
 
         Intent intent = new Intent(this, MenuMainActivity.class);
-        intent.putExtra(EMAIL, txtEmail);
+        intent.putExtra(USERNAME, txtUsername);
+
         startActivity(intent);
         finish(); //impossivel retornar a esta atividade
     }

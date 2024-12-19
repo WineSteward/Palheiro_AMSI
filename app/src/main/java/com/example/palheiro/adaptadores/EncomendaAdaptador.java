@@ -5,12 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
-
+import androidx.core.content.ContextCompat;
 import com.example.palheiro.R;
 import com.example.palheiro.modelo.Fatura;
-import com.example.palheiro.modelo.Livro;
 
 import java.util.ArrayList;
 
@@ -65,7 +63,7 @@ public class EncomendaAdaptador extends BaseAdapter
             view.setTag(viewHolder);
         }
 
-        viewHolder.update(encomendas.get(i)); //i é a posicao da encomenda
+        viewHolder.update(encomendas.get(i),context); //i é a posicao da encomenda
 
         return view;
     }
@@ -81,18 +79,17 @@ public class EncomendaAdaptador extends BaseAdapter
             tvEstado = view.findViewById(R.id.tvEncomendaEstadoItem);
         }
 
-        public void update(Fatura encomenda)
+        public void update(Fatura encomenda, Context context)
         {
             tvData.setText(encomenda.getData());
 
             if(encomenda.getEstadoEncomenda() == 1)
             {
                 tvEstado.setText("Entregue");
-                tvEstado.setTextColor(R.color.palheiro_green);
+                tvEstado.setTextColor(ContextCompat.getColor(context, R.color.palheiro_green));
             }
         }
     }
-
 
 }
 
