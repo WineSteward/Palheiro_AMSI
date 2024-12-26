@@ -53,7 +53,7 @@ public class EncomendaAdaptador extends BaseAdapter
         if(view == null)
         {
             //carregar o layout com o inflater
-            view = inflater.inflate(R.layout.item_lista_livro, null);
+            view = inflater.inflate(R.layout.item_lista_encomenda, null);
         }
 
         EncomendaAdaptador.ViewHolderLista viewHolder = (EncomendaAdaptador.ViewHolderLista) view.getTag();

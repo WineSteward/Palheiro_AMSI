@@ -39,7 +39,7 @@ public class EncomendasFragment extends Fragment implements EncomendasListener {
         //set the listener
         SingletonPalheiro.getInstance(getContext()).setEncomendasListener(this);
 
-        //fazer pedido a API de maneira assicrona
+        //fazer pedido a API assicrono
         SingletonPalheiro.getInstance(getContext()).getAllEncomendasAPI(getContext());
 
         //apos pedido feito com sucesso vamos executar o onRefresh method com o listener automaticamente

@@ -114,7 +114,7 @@ public class MenuMainActivity extends AppCompatActivity implements  NavigationVi
         }
         else if(item.getItemId()== R.id.navEncomendas)
         {
-            fragment = new ProdutosFragment();
+            fragment = new EncomendasFragment();
 
             setTitle(item.getTitle());
 

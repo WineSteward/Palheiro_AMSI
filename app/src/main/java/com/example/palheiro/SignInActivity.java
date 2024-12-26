@@ -88,4 +88,9 @@ public class SignInActivity extends AppCompatActivity implements AuthListener
         Pattern pattern = Patterns.EMAIL_ADDRESS;
         return pattern.matcher(email).matches();
     }
+
+    @Override
+    public void onUpdateLogin(String token) {
+
+    }
 }

@@ -76,11 +76,7 @@ public class DetalhesListaComprasActivity extends AppCompatActivity implements L
 
                         SingletonPalheiro.getInstance(getApplicationContext()).addListaComprasAPI(listaCompras, getApplicationContext());
                     }
-                    setResult(Activity.RESULT_OK);
-
-                    finish();
                 }
-
             }
         });
     }

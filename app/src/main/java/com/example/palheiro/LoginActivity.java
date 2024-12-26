@@ -60,6 +60,12 @@ public class LoginActivity extends AppCompatActivity implements AuthListener {
             return;
         }
 
+        Intent intent = new Intent(this, MenuMainActivity.class);
+        intent.putExtra(USERNAME, txtUsername);
+
+        startActivity(intent);
+        finish(); //impossivel retornar a esta atividade
+
         SingletonPalheiro.getInstance(getApplicationContext()).loginAPI(getApplicationContext(), txtUsername, txtPassword);
     }
 

@@ -17,6 +17,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.palheiro.ListasComprasFragment;
 import com.example.palheiro.listeners.CarrinhoListener;
+import com.example.palheiro.listeners.CupaoListener;
 import com.example.palheiro.listeners.EncomendasListener;
 import com.example.palheiro.listeners.FaturasListener;
 import com.example.palheiro.listeners.ListaComprasListener;
@@ -28,6 +29,7 @@ import com.example.palheiro.listeners.ServerListener;
 import com.example.palheiro.utils.AuthJsonParser;
 import com.example.palheiro.utils.CarrinhoJsonParser;
 import com.example.palheiro.utils.CategoriaJsonParser;
+import com.example.palheiro.utils.CupaoJsonParser;
 import com.example.palheiro.utils.EncomendaJsonParser;
 import com.example.palheiro.utils.FaturaJsonParser;
 import com.example.palheiro.utils.ListaComprasJsonParser;
@@ -58,6 +60,7 @@ public class SingletonPalheiro
     private ArrayList<Fatura> faturas;
     private ArrayList<Produto> produtos;
     private ArrayList<Categoria> categorias;
+    private ArrayList<Desconto> cupoes;
     private Produto produto;
     private Carrinho carrinho;
     private Fatura fatura;
@@ -94,6 +97,7 @@ public class SingletonPalheiro
     private FaturasListener faturasListener;
     private ServerListener serverListener;
     private ProfileListener profileListener;
+    private CupaoListener cupaoListener;
 
     public static synchronized SingletonPalheiro getInstance(Context context)
     {
@@ -115,9 +119,15 @@ public class SingletonPalheiro
         produtos = new ArrayList<>();
         faturas = new ArrayList<>();
         produtos = new ArrayList<>();
+        cupoes = new ArrayList<>();
     }
 
     //region - set Listeners
+
+    public void setCupaoListener(CupaoListener cupaoListener)
+    {
+        this.cupaoListener = cupaoListener;
+    }
 
     public void setProfileListener(ProfileListener profileListener)
     {
@@ -497,6 +507,7 @@ public class SingletonPalheiro
             {
                 //nao tem ligacao a internet
                 Toast.makeText(context, "Sem Internet", Toast.LENGTH_SHORT).show();
+
             }
             else
             {
@@ -1161,6 +1172,7 @@ public class SingletonPalheiro
 
 
 
+    //region - Cupao
 
     public void checkCupaoAPI(String cupao, final Context context)
     {
@@ -1221,6 +1233,40 @@ public class SingletonPalheiro
         }
     }
 
+    public void getAllCupoesAPI(final Context context)
+    {
+        if(isConnectionInternet(context))
+        {
+            JsonArrayRequest reqSelect = new JsonArrayRequest(Request.Method.GET, mURLAPICupoes+"/all", null, new Response.Listener<JSONArray>()
+            {
+                @Override
+                public void onResponse(JSONArray response) {
+
+                    //handle success call to API
+                    cupoes = CupaoJsonParser.parserJsonCupoes(response);
+
+                    //atualizar a vista
+                    if(cupaoListener != null)
+                    {
+                        cupaoListener.onRefreshCupoes(context, cupoes);
+                    }
+
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+            volleyQueue.add(reqSelect);
+        }
+        else
+        {
+            Toast.makeText(context, "Sem Ligação à Internet", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    //endregion
 
     public static boolean isConnectionInternet(Context context)
     {

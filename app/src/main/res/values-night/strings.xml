@@ -105,4 +105,5 @@
     <string name="txtLabelProfileMorada2">Morada 2:</string>
     <string name="txtLabelProfileCodigoPostal">Codigo Postal:</string>
     <string name="txtProfileBtnGuardar">Guardar</string>
+    <string name="txtItemCupaoNome">Nome Cupão</string>
 </resources>
