@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/tvTituloFaturaDetalhes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/txtTituloFaturaDetalhes"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginBottom="16dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="8dp">
+
+        <TextView
+            android:id="@+id/tvLabelNumeroFatura"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="@string/txtNumeroFaturaDetalhes" />
+
+        <TextView
+            android:id="@+id/tvNumeroFaturaDetalhes"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/txtNFaturaDetalhes"
+            android:textStyle="bold"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="8dp">
+
+        <TextView
+            android:id="@+id/tvLabelMetodoPagamentoFaturaDetalhes"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="@string/txtMetodoPagamentoFaturaDetalhes" />
+
+        <TextView
+            android:id="@+id/tvMetodoPagamentoFaturaDetalhes"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="8dp">
+
+        <TextView
+            android:id="@+id/tvLabelMetodoExpedicaoFaturaDetalhes"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="@string/txtMetodoExpedicaoFaturaDetalhes" />
+
+        <TextView
+            android:id="@+id/tvMetodoExpedicaoFaturaDetalhes"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="8dp">
+
+        <TextView
+            android:id="@+id/tvLabelTotalFaturaDetalhes"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="@string/txtTotalFaturaDetalhes" />
+
+        <TextView
+            android:id="@+id/tvTotalCompraFaturaDetalhes"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="8dp">
+
+        <TextView
+            android:id="@+id/tvLabelDataFaturaDetalhes"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="@string/txtDataFaturaDetalhes" />
+
+        <TextView
+            android:id="@+id/tvDataFaturaDetalhes"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvLabelLinhasFaturaDetalhes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/txtLinhasFaturaDetalhes"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp" />
+
+    <ListView
+        android:id="@+id/lvLinhasFatura"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:dividerHeight="1dp" />
+
+</LinearLayout>

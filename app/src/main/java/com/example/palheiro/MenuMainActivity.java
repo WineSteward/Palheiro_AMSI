@@ -98,32 +98,47 @@ public class MenuMainActivity extends AppCompatActivity implements  NavigationVi
     {
         Fragment fragment = null;
 
-        if(item.getItemId() == R.id.navLista)
+        if(item.getItemId()== R.id.navProdutos)
+            {
+            fragment = new ProdutosFragment();
+
+            setTitle(item.getTitle());
+        }
+        else if(item.getItemId() == R.id.navCarrinho)
         {
 
-            fragment = new ListaLivrosFragment();
+            fragment = new CarrinhoFragment();
 
             setTitle(item.getTitle());
 
         }
-        else if(item.getItemId()== R.id.navGrelha)
+        else if(item.getItemId()== R.id.navEncomendas)
         {
-            fragment = new GrelhaLivrosFragment();
+            fragment = new ProdutosFragment();
 
             setTitle(item.getTitle());
 
         }
-        else if(item.getItemId()== R.id.navProdutos)
+        else if(item.getItemId()== R.id.navFaturas)
         {
-            fragment = new ListaProdutosFragment();
+            fragment = new FaturasFragment();
 
             setTitle(item.getTitle());
 
         }
-        //TODO ADD MAIS ELSE IF PARA CADA ITEM NO MENU LATERAL
-        else
+        else if(item.getItemId()== R.id.navListasCompras)
         {
-            enviarEmail();
+            fragment = new ListasComprasFragment();
+
+            setTitle(item.getTitle());
+
+        }
+        else if(item.getItemId()== R.id.navPerfil)
+        {
+            fragment = new PerfilFragment();
+
+            setTitle(item.getTitle());
+
         }
 
         drawer.closeDrawer(GravityCompat.START);
@@ -133,11 +148,6 @@ public class MenuMainActivity extends AppCompatActivity implements  NavigationVi
             fragmentManager.beginTransaction().replace(R.id.contentFragment, fragment).commit(); //substituir algo pedaco de layout pelo fragmento
         }
         return true;
-    }
-
-    private void enviarEmail()
-    {
-        //TODO: intent implicito ACTION_SEND
     }
 }
 

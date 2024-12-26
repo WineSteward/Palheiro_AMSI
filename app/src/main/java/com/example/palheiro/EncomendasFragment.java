@@ -1,6 +1,5 @@
 package com.example.palheiro;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -8,12 +7,9 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.palheiro.adaptadores.EncomendaAdaptador;
-import com.example.palheiro.adaptadores.ListaLivrosAdaptador;
-import com.example.palheiro.adaptadores.ListasComprasAdaptador;
 import com.example.palheiro.listeners.EncomendasListener;
 import com.example.palheiro.modelo.Fatura;
 import com.example.palheiro.modelo.SingletonPalheiro;

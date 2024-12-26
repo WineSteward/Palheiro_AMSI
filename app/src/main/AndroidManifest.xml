@@ -17,11 +17,15 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".DetalhesListaComprasActivity"
+            android:name=".ServidorActivity"
+            android:exported="false"
+            android:parentActivityName=".LoginActivity"/>
+        <activity
+            android:name=".DetalhesFaturaActivity"
             android:exported="false"
             android:parentActivityName=".MenuMainActivity"/>
         <activity
-            android:name=".DetalhesLivroActivity"
+            android:name=".DetalhesListaComprasActivity"
             android:exported="false"
             android:parentActivityName=".MenuMainActivity" />
         <activity

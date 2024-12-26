@@ -79,7 +79,7 @@ public class ListasComprasAdaptador extends BaseAdapter
     //classe auxiliar interna
     private class ViewHolderLista
     {
-        private TextView tvTituloListaCompras, tvDescricaoListaCompras;
+        private TextView tvTituloListaCompras;
 
         //contrutor
         public ViewHolderLista(View view)

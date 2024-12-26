@@ -10,15 +10,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
 import com.example.palheiro.adaptadores.CarrinhoAdaptador;
 import com.example.palheiro.listeners.CarrinhoListener;
-import com.example.palheiro.listeners.CupaoValidationListener;
-import com.example.palheiro.listeners.MetodosExpedicaoListener;
-import com.example.palheiro.listeners.MetodosPagamentoListener;
 import com.example.palheiro.modelo.Carrinho;
 import com.example.palheiro.modelo.LinhaCarrinho;
 import com.example.palheiro.modelo.MetodoExpedicao;
@@ -27,7 +25,8 @@ import com.example.palheiro.modelo.SingletonPalheiro;
 
 import java.util.ArrayList;
 
-public class CarrinhoFragment extends Fragment implements CarrinhoListener, MetodosExpedicaoListener, MetodosPagamentoListener {
+public class CarrinhoFragment extends Fragment implements CarrinhoListener
+{
 
     private Carrinho carrinho;
     private ArrayList<MetodoPagamento> metodosPagamento;
@@ -36,10 +35,13 @@ public class CarrinhoFragment extends Fragment implements CarrinhoListener, Meto
     private ListView lvCarrinho;
     private Spinner spinnerMetodosPagamento;
     private Spinner spinnerMetodosExpedicao;
-    private Button btnComprar;
+    private Button btnComprar, btnAplicarCupao;
     private EditText etCupao;
+    private TextView tvTotalCarrinho;
+    private CarrinhoAdaptador carrinhoAdapter;
 
-    public CarrinhoFragment() {
+    public CarrinhoFragment()
+    {
         // Required empty public constructor
     }
 
@@ -51,12 +53,15 @@ public class CarrinhoFragment extends Fragment implements CarrinhoListener, Meto
         setHasOptionsMenu(true);
 
         lvCarrinho = view.findViewById(R.id.lvCarrinho);
+        btnComprar = view.findViewById(R.id.btnConcluirCompra);
+        btnAplicarCupao = view.findViewById(R.id.btnAplicarCupaoItemCarrinho);
+        tvTotalCarrinho = view.findViewById(R.id.tvTotalCarrinho);
+        etCupao = view.findViewById(R.id.etCupao);
+        spinnerMetodosExpedicao = view.findViewById(R.id.spinnerMetodosExpedicao);
+        spinnerMetodosPagamento = view.findViewById(R.id.spinnerMetodosPagamento);
 
         //set de todos os listeners necessarios
-
         SingletonPalheiro.getInstance(getContext()).setCarrinhoListener(this);
-        SingletonPalheiro.getInstance(getContext()).setMetodosPagamentoListener(this);
-        SingletonPalheiro.getInstance(getContext()).setMetodosExpedicaoListener(this);
 
         //fazer pedidos a API
         SingletonPalheiro.getInstance(getContext()).getCarrinhoAPI(getContext());
@@ -65,23 +70,14 @@ public class CarrinhoFragment extends Fragment implements CarrinhoListener, Meto
 
         //apos pedido feito com sucesso vamos executar o onRefresh method com o listener automaticamente
 
-        /* adaptador com eles
-        spinnerMetodosPagamento = view.findViewById(R.id.spinnerMetodosPagamento);
-        spinnerMetodosExpedicao = view.findViewById(R.id.spinnerMetodosExpedicao);
-        btnComprar = view.findViewById(R.id.btnComprar);
-        etCupao = view.findViewById(R.id.etCupao);
-        */
 
-        // Fetch data from Singleton
-        carrinho = SingletonPalheiro.getInstance(getContext()).getCarrinho();
 
-        metodosExpedicao = SingletonPalheiro.getInstance(getContext()).getMetodosExpedicao();
-
-        metodosPagamento = SingletonPalheiro.getInstance(getContext()).getMetodosPagamento();
-
-        lvCarrinho.setAdapter(new CarrinhoAdaptador(getContext(), carrinho.getLinhasCarrinho()));
-
-        setupSpinners(getContext());
+        btnAplicarCupao.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SingletonPalheiro.getInstance(getContext()).checkCupaoAPI(etCupao.getText().toString(), getContext());
+            }
+        });
 
         // Ao selecionar o botao para concluir a compra
         btnComprar.setOnClickListener(new View.OnClickListener() {
@@ -91,74 +87,40 @@ public class CarrinhoFragment extends Fragment implements CarrinhoListener, Meto
                 MetodoPagamento metodoPagamentoSelecionado = metodosPagamento.get(spinnerMetodosPagamento.getSelectedItemPosition());
                 MetodoExpedicao metodoExpedicaoSelecionado = metodosExpedicao.get(spinnerMetodosExpedicao.getSelectedItemPosition());
 
-                if (metodoPagamentoSelecionado == null || metodoExpedicaoSelecionado == null) {
-                    Toast.makeText(getContext(), "Por favor selecione um método de pagamento/expedição", Toast.LENGTH_SHORT).show();
+                if (lvCarrinho.getAdapter() == null || lvCarrinho.getAdapter().getCount() == 0) {
+                    Toast.makeText(getContext(), "Carrinho vazio. Adicione itens antes de continuar.", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                if (etCupao.length() != 0)
+                if (metodoPagamentoSelecionado == null || metodoExpedicaoSelecionado == null)
                 {
-                    SingletonPalheiro.getInstance(getContext()).checkCupaoAPI(etCupao.getText().toString(), getContext(), new CupaoValidationListener()
-                    {
-                        @Override
-                        public void onValidationSuccess(boolean isValid)
-                        {
-                            if (isValid)
-                            {
-                                Toast.makeText(getContext(), "Cupão Válido", Toast.LENGTH_SHORT).show();
-
-                                //TODO:CUPAO VALID PROCEED HERE
-
-                                // Call API to create a fatura
-                                SingletonPalheiro.getInstance(getContext()).postFaturaAPI(getContext(), carrinho, metodoPagamentoSelecionado, metodoExpedicaoSelecionado, etCupao.getText().toString());
-
-                                Toast.makeText(getContext(), "Transaction Complete", Toast.LENGTH_SHORT).show();
-
-                                // Navigate to another fragment
-                                Fragment newFragment = new ListaProdutosFragment();
-                                getParentFragmentManager()
-                                        .beginTransaction()
-                                        .replace(R.id.contentFragment, newFragment)
-                                        .addToBackStack(null)
-                                        .commit();
-                            }
-                            else
-                            {
-                                Toast.makeText(getContext(), "Cupão Inválido", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-
-                        @Override
-                        public void onValidationFailure(String errorMessage) {
-                            Toast.makeText(getContext(), "Error: " + errorMessage, Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                    Toast.makeText(getContext(), "Por favor selecione um método de pagamento/expedição", Toast.LENGTH_SHORT).show();
+                    return;
                 }
-                else
-                {
-                    Toast.makeText(getContext(), "Please enter a coupon", Toast.LENGTH_SHORT).show();
-                }
-
+                    // Call API to create a fatura
+                    SingletonPalheiro.getInstance(getContext()).postFaturaAPI(getContext(), metodoPagamentoSelecionado, metodoExpedicaoSelecionado, etCupao.getText().toString());
             }
         });
 
         return view;
     }
 
-    private void setupSpinners(Context context)
-    {
-
-
-
-
-
-    }
-
     @Override
     public void onRefreshCarrinho(ArrayList<LinhaCarrinho> linhasCarrinho)
     {
         if(linhasCarrinho != null)
-            lvCarrinho.setAdapter(new CarrinhoAdaptador(getContext(), linhasCarrinho));
+        {
+            carrinhoAdapter = new CarrinhoAdaptador(getContext(), linhasCarrinho);
+            lvCarrinho.setAdapter(carrinhoAdapter);
+        }
+    }
+
+    @Override
+    public void onRefreshMetodosPagamento(ArrayList<MetodoPagamento> metodosPagamento, Context context)
+    {
+        ArrayAdapter<MetodoPagamento> MetodoPagamentoAdaptador = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, metodosPagamento);
+        MetodoPagamentoAdaptador.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerMetodosPagamento.setAdapter(MetodoPagamentoAdaptador);
     }
 
     @Override
@@ -170,10 +132,43 @@ public class CarrinhoFragment extends Fragment implements CarrinhoListener, Meto
     }
 
     @Override
-    public void onRefreshMetodosPagamento(ArrayList<MetodoPagamento> metodosPagamento, Context context)
+    public void onCupaoResponse(boolean isValid, double value, Context context)
     {
-        ArrayAdapter<MetodoPagamento> MetodoPagamentoAdaptador = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, metodosPagamento);
-        MetodoPagamentoAdaptador.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerMetodosPagamento.setAdapter(MetodoPagamentoAdaptador);
+        if(isValid)
+        {
+            tvTotalCarrinho.setText(value+"€");
+            Toast.makeText(context, "Cupão aplicado com sucesso", Toast.LENGTH_SHORT).show();
+        }
+            Toast.makeText(context, "Cupão Inválido", Toast.LENGTH_SHORT).show();
+            //if not valid display a toast saying the cupon is not valid
     }
+
+    @Override
+    public void onCompraConcluida(Context context, boolean cupaoValid) {
+
+        if(!cupaoValid)
+        {
+            Toast.makeText(context, "Cupao Inválido", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Toast.makeText(context, "Compra concluída com sucesso", Toast.LENGTH_SHORT).show();
+
+        //fechar fragment e abrir outro
+        Fragment newFragment = new ProdutosFragment();
+        getParentFragmentManager()
+                .beginTransaction()
+                .replace(R.id.contentFragment, newFragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void onRefreshQuantidade(Context context, int quantidade, double total, LinhaCarrinho linhaCarrinho)
+    {
+        tvTotalCarrinho.setText(total+"€");
+        carrinhoAdapter.updateItemInAdapter(linhaCarrinho);
+    }
+
+
 }

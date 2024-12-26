@@ -14,12 +14,15 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.palheiro.listeners.AuthListener;
+
 import java.util.Objects;
 import java.util.regex.Pattern;
 
-public class SignInActivity extends AppCompatActivity {
+public class SignInActivity extends AppCompatActivity implements AuthListener
+{
 
-    public static final String EMAIL = "Email";
+    public static final String USERNAME = "Username";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,22 +51,28 @@ public class SignInActivity extends AppCompatActivity {
         EditText etCodigoPostal = findViewById(R.id.etCodigoPostal);
 
         String txtEmail = etEmail.getText().toString();
+        String txtUsername = etUsername.getText().toString();
         String txtPassword = etPassword.getText().toString();
 
-        if(!isEmailValid(txtEmail) || !isPasswordValid(txtPassword))
+        if(!isPasswordValid(txtPassword))
         {
-            etEmail.setError("Formato de email inválido");
-            etPassword.setError("Use uma password com mais de 3 caracteres");
+            etPassword.setError("Formato inválido, indique pelo menos 3 caracteres");
+        }
+        if(!isEmailValid(txtEmail))
+        {
+            etEmail.setError("Email inválido");
             return;
         }
 
-        Toast.makeText(this, "Registo realizado com sucecsso", Toast.LENGTH_SHORT).show();
+        /* TODO todo este conteudo tem de ser inserido em um metodo de listener chamado pela response da API
 
-        Intent intent = new Intent(this, MenuMainActivity.class);
-        intent.putExtra(EMAIL, txtEmail);
-        startActivity(intent);
-        finish(); //impossivel retornar a esta atividade
+            Toast.makeText(this, "Registo realizado com sucecsso", Toast.LENGTH_SHORT).show();
 
+            Intent intent = new Intent(this, MenuMainActivity.class);
+            intent.putExtra(USERNAME, txtUsername);
+            startActivity(intent);
+            finish(); //impossivel retornar a esta atividade
+        */
     }
 
     private boolean isPasswordValid(String password)
@@ -71,7 +80,7 @@ public class SignInActivity extends AppCompatActivity {
         if(Objects.equals(password, ""))
             return false;
 
-        return password.length() >= 4;
+        return password.length() >= 3;
     }
 
     private boolean isEmailValid(String email)

@@ -2,7 +2,7 @@ package com.example.palheiro.modelo;
 
 public class MetodoExpedicao
 {
-    private int id:
+    private int id;
     private String nome;
 
     public MetodoExpedicao(int id, String nome) {

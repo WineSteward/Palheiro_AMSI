@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -42,6 +43,31 @@ public class CarrinhoAdaptador extends BaseAdapter
     @Override
     public long getItemId(int position) {
         return 0;
+    }
+
+    //atualizar a listview sobre o novo estado da linha do carrinho
+    // (se qtdd da linha for 0, remover linha da listview do carrinho)
+    public void updateItemInAdapter(LinhaCarrinho linhaCarrinho)
+    {
+        for (int i = 0; i < linhasCarrinho.size(); i++)
+        {
+            if (linhasCarrinho.get(i).getId() == linhaCarrinho.getId())
+            {
+                if (linhaCarrinho.getQuantidade() == 0)
+                {
+                    linhasCarrinho.remove(i);
+                    notifyDataSetChanged();
+                    return;
+                }
+                else
+                {
+                    linhasCarrinho.set(i, linhaCarrinho);
+                    notifyDataSetChanged();
+                    return;
+                }
+            }
+        }
+        notifyDataSetChanged();
     }
 
     @Override //por cada linha do carrinho este metodo é executado
@@ -82,6 +108,7 @@ public class CarrinhoAdaptador extends BaseAdapter
     {
         private ImageView ivImagemItemCarrinho;
         private TextView tvNomeItemCarrinho, tvQuantidadeItemCarrinho, tvMarcaItemCarrinho, tvTotalItemCarrinho;
+        private Button btnAumentar, btnDiminuir;
 
         //contrutor
         public ViewHolderLista(View view)
@@ -91,6 +118,8 @@ public class CarrinhoAdaptador extends BaseAdapter
             tvQuantidadeItemCarrinho = view.findViewById(R.id.tvQuantidadeItemCarrinho);
             tvMarcaItemCarrinho = view.findViewById(R.id.tvMarcaItemCarrinho);
             tvTotalItemCarrinho = view.findViewById(R.id.tvTotalItemCarrinho);
+            btnAumentar = view.findViewById(R.id.btnAddItemCarrinho);
+            btnDiminuir = view.findViewById(R.id.btnSubItemCarrinho);
         }
 
 
@@ -101,9 +130,27 @@ public class CarrinhoAdaptador extends BaseAdapter
             tvQuantidadeItemCarrinho.setText(linhaCarrinho.getQuantidade());
             tvMarcaItemCarrinho.setText(linhaCarrinho.getProduto().getMarca().getNome());
             tvTotalItemCarrinho.setText(linhaCarrinho.getTotal()+"€");
-        }
-    }
 
+            btnAumentar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int novaQtdd = linhaCarrinho.getQuantidade() + 1;
+
+                    SingletonPalheiro.getInstance(context).editLinhaCarrinhoAPI(linhaCarrinho, novaQtdd, context);
+                }
+            });
+
+            btnDiminuir.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int novaQtdd = linhaCarrinho.getQuantidade() - 1;
+
+                    SingletonPalheiro.getInstance(context).editLinhaCarrinhoAPI(linhaCarrinho, novaQtdd, context);
+                }
+            });
+        }
+
+    }
 
 }
 

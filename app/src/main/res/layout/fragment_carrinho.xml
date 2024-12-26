@@ -19,6 +19,33 @@
             android:divider="@color/gray"
             android:dividerHeight="1dp" />
 
+        <!-- Total Label and Value -->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/txtLabelTotalCarrinho"
+                android:textSize="16sp"
+                android:textColor="@android:color/black"
+                android:layout_gravity="center_vertical" />
+
+            <TextView
+                android:id="@+id/tvTotalCarrinho"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/txtTotalCarrinho"
+                android:textSize="16sp"
+                android:textColor="@android:color/black"
+                android:layout_marginStart="8dp"
+                android:layout_gravity="center_vertical" />
+
+        </LinearLayout>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -47,23 +74,43 @@
             android:layout_height="wrap_content"
             android:spinnerMode="dropdown" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/txtLabelCupao"
-            android:paddingTop="8dp"
-            android:textSize="16sp"
-            android:textColor="@android:color/black" />
-
-        <EditText
-            android:id="@+id/etCupao"
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/txtHintCupao"
-            android:inputType="text" />
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/txtLabelCupao"
+                android:textSize="16sp"
+                android:textColor="@android:color/black"
+                android:layout_gravity="center_vertical" />
+
+            <EditText
+                android:id="@+id/etCupao"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/txtHintCupao"
+                android:inputType="text"
+                android:layout_marginStart="8dp" />
+
+            <Button
+                android:id="@+id/btnAplicarCupaoItemCarrinho"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/txtAplicarItemCarrinho"
+                android:backgroundTint="@color/palheiro_green"
+                android:textColor="@android:color/white"
+                android:textSize="14sp" />
+
+        </LinearLayout>
 
         <Button
-            android:id="@+id/btnComprar"
+            android:id="@+id/btnConcluirCompra"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"

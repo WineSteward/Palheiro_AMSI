@@ -26,6 +26,7 @@ public class LoginActivity extends AppCompatActivity implements AuthListener {
 
     public static final String USERNAME = "Username";
     private String txtUsername;
+    EditText etPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -48,7 +49,7 @@ public class LoginActivity extends AppCompatActivity implements AuthListener {
         Resources res = getResources();
 
         EditText etUsername = findViewById(R.id.etUsername);
-        EditText etPassword = findViewById(R.id.etPassword);
+        etPassword = findViewById(R.id.etPassword);
 
         txtUsername = etUsername.getText().toString();
         String txtPassword = etPassword.getText().toString();
@@ -81,6 +82,7 @@ public class LoginActivity extends AppCompatActivity implements AuthListener {
     {
         if(token.isEmpty())
         {
+            etPassword.setText("");
             Toast.makeText(this, "Credenciais Incorretas", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -99,6 +101,12 @@ public class LoginActivity extends AppCompatActivity implements AuthListener {
 
         startActivity(intent);
         finish(); //impossivel retornar a esta atividade
+    }
+
+    public void onClickSettings(View view) {
+
+        Intent intent = new Intent(this, ServidorActivity.class);
+        startActivity(intent);
     }
 }
 

@@ -3,11 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".GrelhaLivrosFragment">
+    tools:context=".FaturasFragment">
 
-    <GridView
-        android:id="@+id/gvLivros"
+
+    <ListView
+        android:id="@+id/lvFaturas"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:numColumns="3" />
+        android:layout_height="match_parent" />
 </FrameLayout>

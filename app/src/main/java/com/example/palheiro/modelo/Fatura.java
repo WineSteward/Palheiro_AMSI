@@ -8,7 +8,7 @@ public class Fatura
     private MetodoExpedicao metodoExpedicao;
     private MetodoPagamento metodoPagamento;
     float total;
-    private String data;
+    private String data, metodoExpedicaoNome, metodoPagamentoNome;
     private ArrayList<LinhaFatura> linhasFatura = new ArrayList<>();
     private Desconto desconto;
 
@@ -32,12 +32,37 @@ public class Fatura
         this.data = data;
     }
 
+    public Fatura(int id, String data, String metodoExpedicao, String metodoPagamento, double total, ArrayList<LinhaFatura> linhasFatura)
+    {
+        this.id = id;
+        this.data = data;
+        this.metodoExpedicaoNome = metodoExpedicao;
+        this.metodoPagamentoNome = metodoPagamento;
+        this.total = (float) total;
+        this.linhasFatura = linhasFatura;
+    }
     public int getId() {
         return id;
     }
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getMetodoExpedicaoNome() {
+        return metodoExpedicaoNome;
+    }
+
+    public void setMetodoExpedicaoNome(String metodoExpedicaoNome) {
+        this.metodoExpedicaoNome = metodoExpedicaoNome;
+    }
+
+    public String getMetodoPagamentoNome() {
+        return metodoPagamentoNome;
+    }
+
+    public void setMetodoPagamentoNome(String metodoPagamentoNome) {
+        this.metodoPagamentoNome = metodoPagamentoNome;
     }
 
     public int getValida() {

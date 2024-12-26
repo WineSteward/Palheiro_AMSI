@@ -17,15 +17,15 @@ public class EncomendaJsonParser
 
         for( int i = 0; i < response.length(); i++)
         {
-            JSONObject encomendasComprasJson = null;
+            JSONObject encomendaComprasJson = null;
 
             try
             {
-                encomendasComprasJson = (JSONObject) response.get(i);
+                encomendaComprasJson = (JSONObject) response.get(i);
 
-                int id = encomendasComprasJson.getInt("id");
-                int estadoEncomenda = encomendasComprasJson.getInt("estadoEncomenda");
-                String data = encomendasComprasJson.getString("data");
+                int id = encomendaComprasJson.getInt("id");
+                int estadoEncomenda = encomendaComprasJson.getInt("estadoEncomenda");
+                String data = encomendaComprasJson.getString("data");
 
                 encomendas.add(new Fatura(id, estadoEncomenda, data));
 

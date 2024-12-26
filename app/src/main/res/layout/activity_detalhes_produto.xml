@@ -66,6 +66,29 @@
         android:layout_weight="0.02" />
 
     <TextView
+        android:id="@+id/tvLabelValorNutricional"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/txtLabelValorNutricionalDelhtalhes"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="4dp" />
+
+    <TextView
+        android:id="@+id/tvValorNutricionalDetalhes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/txtValorNutricionalDetalhes"
+        android:textSize="16sp"
+        android:layout_marginBottom="8dp" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.02" />
+
+
+    <TextView
         android:id="@+id/tvPrecoProdutoDetalhes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -81,7 +104,7 @@
         android:layout_weight="0.02" />
 
     <Button
-        android:id="@+id/btnAddCarrinho"
+        android:id="@+id/btnDetalhesProdutoAddCarrinho"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/txtaddCarrinho"

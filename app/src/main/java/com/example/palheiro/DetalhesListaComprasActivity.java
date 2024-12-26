@@ -37,7 +37,9 @@ public class DetalhesListaComprasActivity extends AppCompatActivity implements L
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalhes_lista_compras);
 
@@ -59,7 +61,7 @@ public class DetalhesListaComprasActivity extends AppCompatActivity implements L
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isListaComprasValid())
+                if (isListaComprasValid())//editar lista compras
                 {
                     if(listaCompras != null)
                     {
@@ -68,13 +70,17 @@ public class DetalhesListaComprasActivity extends AppCompatActivity implements L
 
                         SingletonPalheiro.getInstance(getApplicationContext()).editListaComprasAPI(listaCompras, getApplicationContext());
                     }
-                    else
+                    else// --> adicionar lista compras
                     {
                         listaCompras = new ListaCompras(0, etTitulo.getText().toString(), etDescricao.getText().toString());
 
                         SingletonPalheiro.getInstance(getApplicationContext()).addListaComprasAPI(listaCompras, getApplicationContext());
                     }
+                    setResult(Activity.RESULT_OK);
+
+                    finish();
                 }
+
             }
         });
     }
@@ -94,7 +100,7 @@ public class DetalhesListaComprasActivity extends AppCompatActivity implements L
 
     private void carregarListaCompras()
     {
-        setTitle("Detalhes: " + listaCompras.getTitulo());
+        setTitle("Lista Compras");
 
         etTitulo.setText(listaCompras.getTitulo());
         etDescricao.setText(listaCompras.getDescricao());

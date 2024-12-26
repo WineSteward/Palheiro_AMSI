@@ -17,23 +17,24 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.palheiro.ListasComprasFragment;
 import com.example.palheiro.listeners.CarrinhoListener;
-import com.example.palheiro.listeners.CupaoValidationListener;
 import com.example.palheiro.listeners.EncomendasListener;
+import com.example.palheiro.listeners.FaturasListener;
 import com.example.palheiro.listeners.ListaComprasListener;
 import com.example.palheiro.listeners.ListasComprasListener;
 import com.example.palheiro.listeners.AuthListener;
-import com.example.palheiro.listeners.MetodosExpedicaoListener;
-import com.example.palheiro.listeners.MetodosPagamentoListener;
-import com.example.palheiro.listeners.ProdutoListener;
 import com.example.palheiro.listeners.ProdutosListener;
+import com.example.palheiro.listeners.ProfileListener;
+import com.example.palheiro.listeners.ServerListener;
 import com.example.palheiro.utils.AuthJsonParser;
 import com.example.palheiro.utils.CarrinhoJsonParser;
+import com.example.palheiro.utils.CategoriaJsonParser;
 import com.example.palheiro.utils.EncomendaJsonParser;
 import com.example.palheiro.utils.FaturaJsonParser;
 import com.example.palheiro.utils.ListaComprasJsonParser;
 import com.example.palheiro.utils.MetodoExpedicaoJsonParser;
 import com.example.palheiro.utils.MetodoPagamentoJsonParser;
 import com.example.palheiro.utils.ProdutoJsonParser;
+import com.example.palheiro.utils.ProfileJsonParser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -54,12 +55,16 @@ public class SingletonPalheiro
     private ArrayList<Fatura> encomendas;
     private ArrayList<MetodoExpedicao> metodosExpedicao;
     private ArrayList<MetodoPagamento> metodosPagamento;
+    private ArrayList<Fatura> faturas;
     private ArrayList<Produto> produtos;
+    private ArrayList<Categoria> categorias;
     private Produto produto;
     private Carrinho carrinho;
+    private Fatura fatura;
     private ListaCompras listaCompras;
+    private UserProfile profile;
 
-    private static final String IP = "172.22.21.209"; //IP do servidor
+    private static String IP = "172.22.21.209"; //IP do servidor
 
     //region - API endpoits
     public static final String mURLAPIProdutos = IP + "/palheiro/backend/web/api/produto";
@@ -74,7 +79,7 @@ public class SingletonPalheiro
     public static final String mURLAPIMetodosPagamento = IP + "/palheiro/backend/web/api/metodopagamento";
     public static final String mURLAPIMetodosExpedicao = IP + "/palheiro/backend/web/api/metodoexpedicao";
     public static final String mURLAPIEncomendas = IP + "palheiro/backend/web/api/encomenda";
-    public static final String mURLAPIUserprofile = IP + "palheiro/backend/web/api/userprofile";
+    public static final String mURLAPIProfile = IP + "palheiro/backend/web/api/userprofile";
 
     //endregion
     private static RequestQueue volleyQueue = null;
@@ -83,12 +88,12 @@ public class SingletonPalheiro
     private EncomendasListener encomendasListener;
     private CarrinhoListener carrinhoListener;
     private ProdutosListener produtosListener;
-    private ProdutoListener produtoListener;
     private ListaComprasListener listaComprasListener;
     private ListasComprasListener listasComprasListener;
-    private MetodosPagamentoListener metodosPagamentoListener;
-    private MetodosExpedicaoListener metodosExpedicaoListener;
     private AuthListener authListener;
+    private FaturasListener faturasListener;
+    private ServerListener serverListener;
+    private ProfileListener profileListener;
 
     public static synchronized SingletonPalheiro getInstance(Context context)
     {
@@ -103,23 +108,30 @@ public class SingletonPalheiro
 
     private SingletonPalheiro(Context context)
     {
-        listasCompras = new ArrayList<ListaCompras>();
+        listasCompras = new ArrayList<>();
         listasComprasBD = new ListaComprasBDHelper(context);
 
-        produtos = new ArrayList<Produto>();
-
+        categorias = new ArrayList<>();
+        produtos = new ArrayList<>();
+        faturas = new ArrayList<>();
+        produtos = new ArrayList<>();
     }
 
     //region - set Listeners
 
-    public void setMetodosExpedicaoListener(MetodosExpedicaoListener metodosExpedicaoListener)
+    public void setProfileListener(ProfileListener profileListener)
     {
-        this.metodosExpedicaoListener = metodosExpedicaoListener;
+        this.profileListener = profileListener;
     }
 
-    public void setMetodosPagamentoListener(MetodosPagamentoListener metodosPagamentoListener)
+    public void setServerListener(ServerListener serverListener)
     {
-        this.metodosPagamentoListener = metodosPagamentoListener;
+        this.serverListener = serverListener;
+    }
+
+    public void setFaturasListener(FaturasListener faturasListener)
+    {
+        this.faturasListener = faturasListener;
     }
 
     public void setEncomendasListener(EncomendasListener encomendasListener)
@@ -137,11 +149,6 @@ public class SingletonPalheiro
         this.produtosListener = produtosListener;
     }
 
-    public void setProdutoListener(ProdutoListener produtoListener)
-    {
-        this.produtoListener = produtoListener;
-    }
-
     public void setListaComprasListener(ListaComprasListener listaComprasListener)
     {
         this.listaComprasListener = listaComprasListener;
@@ -152,10 +159,22 @@ public class SingletonPalheiro
         this.listasComprasListener = listasComprasListener;
     }
 
-    public void setLoginListener(AuthListener authListener)
+    public void setAuthListener(AuthListener authListener)
     {
         this.authListener = authListener;
     }
+
+    //endregion
+
+    public void setIP(String newIP, Context context)
+    {
+        IP = newIP;
+        if(serverListener != null)
+            serverListener.onUpdateServerIP(context);
+    }
+
+
+    //region - auth API
 
     public void loginAPI(Context context, String username, String password)
     {
@@ -259,7 +278,7 @@ public class SingletonPalheiro
         }
         else
         {
-            JsonArrayRequest reqSelect = new JsonArrayRequest(Request.Method.GET, mURLAPIProdutos, null, new Response.Listener<JSONArray>() {
+            JsonArrayRequest reqSelect = new JsonArrayRequest(Request.Method.GET, mURLAPIProdutos+"/all", null, new Response.Listener<JSONArray>() {
                 @Override
                 public void onResponse(JSONArray response) {
 
@@ -268,8 +287,9 @@ public class SingletonPalheiro
                     produtos = ProdutoJsonParser.parserJsonProdutos(response);
 
                     //atualizar a vista
-                    if (produtosListener != null) {
-                        produtosListener.onRefreshDetalhes(produtos);
+                    if (produtosListener != null)
+                    {
+                        produtosListener.onRefreshProdutos(produtos);
                     }
                 }
             }, new Response.ErrorListener() {
@@ -277,55 +297,19 @@ public class SingletonPalheiro
                 public void onErrorResponse(VolleyError error) {
                     Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
                 }
-            });
+            })
+            {
+                @Nullable
+                @Override
+                protected Map<String, String> getParams()
+                {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("access-token", TOKEN);
+                    return params;
+                }
+            };
             volleyQueue.add(reqSelect);
         }
-    }
-
-    public void getOneProdutoAPI(final Context context, int id)
-    {
-        if(!isConnectionInternet(context))
-        {
-            //nao tem ligacao a internet
-            Toast.makeText(context, "Sem Internet", Toast.LENGTH_SHORT).show();
-        }
-        else
-        {
-            JsonObjectRequest reqSelect = new JsonObjectRequest(Request.Method.GET, mURLAPIProdutos + "/id/" + id, null, new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    //handle api successful call
-
-                    produto = ProdutoJsonParser.parserJsonProduto(response);
-
-                    //atualizar a vista
-                    if (produtoListener != null) {
-                        produtoListener.onRefreshDetalhes(produto);
-                    }
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-
-                }
-            });
-            volleyQueue.add(reqSelect);
-        }
-    }
-
-    public void getProdutosByNomeAPI(Conte)
-    {
-
-    }
-
-    public void getProdutosByCategoriaAPI(Conte)
-    {
-
-    }
-
-    public void getProdutosByNomeAndCategoriaAPI(Conte)
-    {
-
     }
 
     public Produto getProduto(int id)
@@ -344,9 +328,51 @@ public class SingletonPalheiro
         return new ArrayList<>(produtos);
     }
 
-    public void addProduto(Produto produto)
+    //endregion
+
+    //region - Categoria Acess
+
+    public void getAllCategoriasAPI(final Context context)
     {
-        produtos.add(produto);
+        if(!isConnectionInternet(context))
+        {
+            //nao tem ligacao a internet
+            Toast.makeText(context, "Sem Internet", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            JsonArrayRequest reqSelect = new JsonArrayRequest(Request.Method.GET, mURLAPICategoria+"/all", null, new Response.Listener<JSONArray>() {
+                @Override
+                public void onResponse(JSONArray response) {
+
+                    //handle success call to API
+
+                    categorias = CategoriaJsonParser.parserJsonCategorias(response);
+
+                    //atualizar o spinner
+                    if (produtosListener != null)
+                    {
+                        produtosListener.onRefreshCategorias(categorias, context);
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            })
+            {
+                @Nullable
+                @Override
+                protected Map<String, String> getParams()
+                {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("access-token", TOKEN);
+                    return params;
+                }
+            };
+            volleyQueue.add(reqSelect);
+        }
     }
 
     //endregion
@@ -427,7 +453,7 @@ public class SingletonPalheiro
         }
         else
         {
-            JsonArrayRequest reqSelect = new JsonArrayRequest(Request.Method.GET, mURLAPIListaCompras, null, new Response.Listener<JSONArray>() {
+            JsonArrayRequest reqSelect = new JsonArrayRequest(Request.Method.GET, mURLAPIListaCompras+"/all", null, new Response.Listener<JSONArray>() {
                 @Override
                 public void onResponse(JSONArray response)
                 {
@@ -474,14 +500,14 @@ public class SingletonPalheiro
             }
             else
             {
-                StringRequest reqInsert = new StringRequest(Request.Method.POST, mURLAPIListaCompras, new Response.Listener<String>() {
+                JsonObjectRequest reqInsert = new JsonObjectRequest(Request.Method.POST, mURLAPIListaCompras, null, new Response.Listener<JSONObject>() {
                     @Override
-                    public void onResponse(String response) {
-
+                    public void onResponse(JSONObject response)
+                    {
                         //handle success call to API
 
                         ListaCompras listaCompras = ListaComprasJsonParser.parserJsonListaCompras(response); //parse de JSON para Modelo
-                        addListaComprasBD(listaCompras); //adicionar ao Array das listas de compras
+                        addListaComprasBD(listaCompras); //adicionar a BD das listas de compras
 
                         //atualizar a vista
                         if(listaComprasListener != null)
@@ -600,7 +626,7 @@ public class SingletonPalheiro
 
     //endregion
 
-    //region - Carrinho/Post Fatura Compra
+    //region - Carrinho/Linha Carrinho
 
     public void getCarrinhoAPI(final Context context)
     {
@@ -647,7 +673,7 @@ public class SingletonPalheiro
         }
     }
 
-    public void addLinhaCarrinhoAPI(final LinhaCarrinho linhaCarrinho, final Context context)
+    public void addLinhaCarrinhoAPI(final int produto_id, final Context context)
     {
         if(! isConnectionInternet(context))
         {
@@ -656,18 +682,14 @@ public class SingletonPalheiro
         }
         else
         {
-            StringRequest reqInsert = new StringRequest(Request.Method.POST, mURLAPIListaCompras, new Response.Listener<String>() {
+            StringRequest reqInsert = new StringRequest(Request.Method.POST, mURLAPICarrinho+"/id/"+produto_id, new Response.Listener<String>() {
                 @Override
-                public void onResponse(String response) {
+                public void onResponse(String response)
+                {
 
                     //handle success call to API
-
-                    ListaCompras listaCompras = ListaComprasJsonParser.parserJsonListaCompras(response); //parse de JSON para Modelo
-                    addListaComprasBD(listaCompras); //adicionar ao Array das listas de compras
-
-                    //atualizar a vista
-                    if(listaComprasListener != null)
-                        listaComprasListener.onRefreshListasCompras(ListasComprasFragment.ADD);
+                    if(produtosListener != null)
+                        produtosListener.onProdutoAddCarrinho(context);
 
                 }
             }, new Response.ErrorListener() {
@@ -683,8 +705,6 @@ public class SingletonPalheiro
                 protected Map<String, String> getParams()
                 {
                     Map<String, String> params = new HashMap<>();
-                    params.put("titulo", listaCompras.getTitulo());
-                    params.put("descricao", listaCompras.getDescricao());
                     params.put("access-token", TOKEN);
                     return params;
                 }
@@ -693,24 +713,45 @@ public class SingletonPalheiro
         }
     }
 
-    public void editLinhaCarrinhoAPI(final LinhaCarrinho linhaCarrinho, final Context context)
+    public void editLinhaCarrinhoAPI(final LinhaCarrinho linhaCarrinho, int quantidade, final Context context)
     {
         if(! isConnectionInternet(context))
         {
             //nao tem ligacao a internet
             Toast.makeText(context, "Sem Internet", Toast.LENGTH_SHORT).show();
         }
-        else {
-            StringRequest reqUpdate = new StringRequest(Request.Method.PUT, mURLAPIListaCompras+"/"+listaCompras.getId(), new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
+        else
+        {
 
+            JSONObject quantidadeJson = new JSONObject();
+            try
+            {
+                quantidadeJson.put("quantidade", quantidade);
+            } catch (JSONException e)
+            {
+                throw new RuntimeException(e);
+            }
+
+            JsonObjectRequest reqUpdate = new JsonObjectRequest(Request.Method.PUT, mURLAPICarrinho+"/id/"+linhaCarrinho.getId(), quantidadeJson, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response)
+                {
                     //handle success call to API
-                    editListaComprasBD(listaCompras);
+                    double total;
+                    try
+                    {
+                        total = response.getDouble("total");
+                    } catch (JSONException e)
+                    {
+                        throw new RuntimeException(e);
+                    }
+
+                    linhaCarrinho.setQuantidade(quantidade);
 
                     //atualizar a vista
-                    if(listaComprasListener != null)
-                        listaComprasListener.onRefreshListasCompras(ListasComprasFragment.EDIT);
+                    if(carrinhoListener != null)
+                        carrinhoListener.onRefreshQuantidade(context, quantidade, total, linhaCarrinho);
+
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -725,8 +766,6 @@ public class SingletonPalheiro
                 protected Map<String, String> getParams()
                 {
                     Map<String, String> params = new HashMap<>();
-                    params.put("titulo", listaCompras.getTitulo());
-                    params.put("descricao", listaCompras.getDescricao());
                     params.put("access-token", TOKEN);
                     return params;
                 }
@@ -792,64 +831,56 @@ public class SingletonPalheiro
         }
     }
 
-    public void getOneEncomendaAPI(final Contex context, int id)
-    {
-        if(!isConnectionInternet(context))
-        {
-            //nao tem ligacao a internet
-            Toast.makeText(context, "Sem Internet", Toast.LENGTH_SHORT).show();
-        }
-        else
-        {
-            JsonObjectRequest reqSelect = new JsonObjectRequest(Request.Method.GET, mURLAPIProdutos + "/id/" + id, null, new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    //handle api successful call
-
-                    produto = ProdutoJsonParser.parserJsonProduto(response);
-
-                    //atualizar a vista
-                    if (produtoListener != null) {
-                        produtoListener.onRefreshDetalhes(produto);
-                    }
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-
-                }
-            });
-            volleyQueue.add(reqSelect);
-        }
-    }
-
     //endregion
 
     //region - Fatura
 
-    public void postFaturaAPI(final Context context, Carrinho carrinho, MetodoPagamento metodoPagamento, MetodoExpedicao metodoExpedicao, String cupao)
+    public Fatura getFatura(int id)
+    {
+        for (Fatura fatura: faturas)
+        {
+            if(fatura.getId() == id)
+                return fatura;
+        }
+
+        return null;
+    }
+
+    public void postFaturaAPI(final Context context, MetodoPagamento metodoPagamento, MetodoExpedicao metodoExpedicao, String cupao)
     {
         if(isConnectionInternet(context))
         {
-            JSONObject faturaJson = FaturaJsonParser.parseToJsonFatura(carrinho, metodoPagamento, metodoExpedicao, cupao);
+            JSONObject faturaJson = FaturaJsonParser.parseToJsonFatura(metodoPagamento, metodoExpedicao, cupao);
 
 
-            JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, mURLAPIFaturas, faturaJson,
+            JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, mURLAPIFaturas+"/new", faturaJson,
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
                             // Handle the response from the API
 
-                            //on the API side I need to clear the carrinho
                             Toast.makeText(context, "Transação Concluída", Toast.LENGTH_SHORT).show();
+                            String res;
+                            boolean cupaoValid = false;
+                            try {
+                                res = response.getString("response");
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
 
+                            if(!res.equals("Invalid"))
+                                cupaoValid = true;
+
+                            if(carrinhoListener != null)
+                            {
+                                carrinhoListener.onCompraConcluida(context, cupaoValid);
+                            }
                         }
                     },
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            // Handle any error from the request
-                            Toast.makeText(context, "Transação falhou: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+
                         }
                     }) {
                 @Override
@@ -868,8 +899,7 @@ public class SingletonPalheiro
         }
     }
 
-    //fix inside
-    public void getAllFaturasAPI(final Contex context)
+    public void getAllFaturasAPI(final Context context)
     {
         if(! isConnectionInternet(context))
         {
@@ -879,18 +909,17 @@ public class SingletonPalheiro
         }
         else
         {
-            JsonArrayRequest reqSelect = new JsonArrayRequest(Request.Method.GET, mURLAPIEncomendas, null, new Response.Listener<JSONArray>() {
+            JsonArrayRequest reqSelect = new JsonArrayRequest(Request.Method.GET, mURLAPIFaturas+"/all", null, new Response.Listener<JSONArray>() {
                 @Override
                 public void onResponse(JSONArray response)
                 {
                     //handle success call to API
 
-                    encomendas = EncomendaJsonParser.parserJsonEncomendas(response);
+                    faturas = FaturaJsonParser.parserJsonFaturas(response);
 
-                    //atualizar a vista
-                    if(encomendasListener != null)
+                    if(faturasListener != null)
                     {
-                        encomendasListener.onRefreshEncomendas(encomendas);
+                        faturasListener.onRefreshFaturas(faturas);
                     }
                 }
             }, new Response.ErrorListener() {
@@ -914,42 +943,11 @@ public class SingletonPalheiro
         }
     }
 
-    public void getOneFaturaAPI(final Contex context, int id)
-    {
-        if(!isConnectionInternet(context))
-        {
-            //nao tem ligacao a internet
-            Toast.makeText(context, "Sem Internet", Toast.LENGTH_SHORT).show();
-        }
-        else
-        {
-            JsonObjectRequest reqSelect = new JsonObjectRequest(Request.Method.GET, mURLAPIProdutos + "/id/" + id, null, new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    //handle api successful call
-
-                    produto = ProdutoJsonParser.parserJsonProduto(response);
-
-                    //atualizar a vista
-                    if (produtoListener != null) {
-                        produtoListener.onRefreshDetalhes(produto);
-                    }
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-
-                }
-            });
-            volleyQueue.add(reqSelect);
-        }
-    }
-
     //endregion
 
     //region Userprofile
 
-    public void getProfileAPI(final Contex context, int id)
+    public void getProfileAPI(final Context context)
     {
         if(!isConnectionInternet(context))
         {
@@ -958,16 +956,16 @@ public class SingletonPalheiro
         }
         else
         {
-            JsonObjectRequest reqSelect = new JsonObjectRequest(Request.Method.GET, mURLAPIProdutos + "/id/" + id, null, new Response.Listener<JSONObject>() {
+            JsonObjectRequest reqSelect = new JsonObjectRequest(Request.Method.GET, mURLAPIProfile + "/my", null, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     //handle api successful call
 
-                    produto = ProdutoJsonParser.parserJsonProduto(response);
+                    profile = ProfileJsonParser.parserJsonProfile(response);
 
                     //atualizar a vista
-                    if (produtoListener != null) {
-                        produtoListener.onRefreshDetalhes(produto);
+                    if (profileListener != null) {
+                        profileListener.onRefreshProfile(profile);
                     }
                 }
             }, new Response.ErrorListener() {
@@ -980,7 +978,7 @@ public class SingletonPalheiro
         }
     }
 
-    public void editProfileAPI(final UserProfile profile, final Context context)
+    public void editProfileAPI(final Context context, String morada, String morada2, String cp)
     {
         if(! isConnectionInternet(context))
         {
@@ -988,16 +986,29 @@ public class SingletonPalheiro
             Toast.makeText(context, "Sem Internet", Toast.LENGTH_SHORT).show();
         }
         else {
-            StringRequest reqUpdate = new StringRequest(Request.Method.PUT, mURLAPIListaCompras+"/"+listaCompras.getId(), new Response.Listener<String>() {
+
+            JSONObject profileJson = new JSONObject();
+            try
+            {
+                profileJson.put("morada", morada);
+                profileJson.put("morada2", morada2);
+                profileJson.put("codigoPostal", cp);
+
+            } catch (JSONException e)
+            {
+                throw new RuntimeException(e);
+            }
+
+            JsonObjectRequest reqUpdate = new JsonObjectRequest(Request.Method.PUT, mURLAPIListaCompras+"/edit",profileJson, new Response.Listener<JSONObject>() {
                 @Override
-                public void onResponse(String response) {
+                public void onResponse(JSONObject response) {
 
                     //handle success call to API
-                    editListaComprasBD(listaCompras);
 
                     //atualizar a vista
-                    if(listaComprasListener != null)
-                        listaComprasListener.onRefreshListasCompras(ListasComprasFragment.EDIT);
+                    if(profileListener != null)
+                        profileListener.onUpdateProfile(context);
+
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -1012,8 +1023,6 @@ public class SingletonPalheiro
                 protected Map<String, String> getParams()
                 {
                     Map<String, String> params = new HashMap<>();
-                    params.put("titulo", listaCompras.getTitulo());
-                    params.put("descricao", listaCompras.getDescricao());
                     params.put("access-token", TOKEN);
                     return params;
                 }
@@ -1022,7 +1031,7 @@ public class SingletonPalheiro
         }
     }
 
-    public void signInProfileAPI(final Userprofile profile, final Context context)
+   /* public void signInProfileAPI(final Userprofile profile, final Context context)
     {
         if(! isConnectionInternet(context))
         {
@@ -1067,7 +1076,7 @@ public class SingletonPalheiro
             volleyQueue.add(reqInsert);
         }
     }
-
+*/
     //endregion
 
     //region - Metodos Pagamento
@@ -1075,7 +1084,7 @@ public class SingletonPalheiro
     {
         if(isConnectionInternet(context))
         {
-            JsonArrayRequest reqSelect = new JsonArrayRequest(Request.Method.GET, mURLAPIMetodosPagamento, null, new Response.Listener<JSONArray>() {
+            JsonArrayRequest reqSelect = new JsonArrayRequest(Request.Method.GET, mURLAPIMetodosPagamento+"/all", null, new Response.Listener<JSONArray>() {
                 @Override
                 public void onResponse(JSONArray response) {
 
@@ -1083,9 +1092,9 @@ public class SingletonPalheiro
                     metodosPagamento = MetodoPagamentoJsonParser.parserJsonMetodoPagamento(response);
 
                     //atualizar a vista
-                    if(metodosPagamentoListener != null)
+                    if(carrinhoListener != null)
                     {
-                        metodosPagamentoListener.onRefreshMetodosPagamento(metodosPagamento, context);
+                        carrinhoListener.onRefreshMetodosPagamento(metodosPagamento, context);
                     }
 
                 }
@@ -1123,9 +1132,9 @@ public class SingletonPalheiro
                     metodosExpedicao = MetodoExpedicaoJsonParser.parserJsonMetodoExpedicao(response);
 
                     //atualizar a vista
-                    if(metodosExpedicaoListener != null)
+                    if(carrinhoListener != null)
                     {
-                        metodosExpedicaoListener.onRefreshMetodosExpedicao(metodosExpedicao, context);
+                        carrinhoListener.onRefreshMetodosExpedicao(metodosExpedicao, context);
                     }
 
                 }
@@ -1153,31 +1162,31 @@ public class SingletonPalheiro
 
 
 
-    public void checkCupaoAPI(String cupao, final Context context, final CupaoValidationListener cupaoListener)
+    public void checkCupaoAPI(String cupao, final Context context)
     {
         if (isConnectionInternet(context))
         {
-
-            StringRequest reqSelect = new StringRequest(Request.Method.GET, mURLAPICupoes,
-                    new Response.Listener<String>()
+            JsonObjectRequest reqSelect = new JsonObjectRequest(Request.Method.GET, mURLAPICupoes,null,
+                    new Response.Listener<JSONObject>()
                     {
                         @Override
-                        public void onResponse(String response)
+                        public void onResponse(JSONObject response)
                         {
                             try
                             {
-                                // Parse the JSON response
-                                JSONObject responseJson = new JSONObject(response);
-                                String res = responseJson.getString("valid");
+                                boolean isValid = response.getBoolean("isValid");
 
-                                // Notify listener of result
-                                if (Objects.equals(res, "valid"))
-                                {
-                                    cupaoListener.onValidationSuccess(true);
+                                if(isValid) {
+                                    double novoTotal = response.getDouble("novoTotal");
+
+                                    if (carrinhoListener != null) {
+                                        carrinhoListener.onCupaoResponse(isValid, novoTotal, context);
+                                    }
                                 }
-                                else
-                                {
-                                    cupaoListener.onValidationSuccess(false);
+                                else {
+                                    if (carrinhoListener != null) {
+                                        carrinhoListener.onCupaoResponse(isValid, 0, context);
+                                    }
                                 }
                             }
                             catch (JSONException e)
@@ -1189,7 +1198,7 @@ public class SingletonPalheiro
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            cupaoListener.onValidationFailure("API Error: " + error.getMessage());
+
                         }
                     })
             {

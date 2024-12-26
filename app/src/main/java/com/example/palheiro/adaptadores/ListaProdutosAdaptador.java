@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -80,6 +81,7 @@ public class ListaProdutosAdaptador extends BaseAdapter
     {
         private ImageView imgProduto;
         private TextView tvNomeProduto, tvPrecoProduto, tvMarcaProduto;
+        private Button btnAdicionar;
 
         //contrutor
         public ViewHolderLista(View view)
@@ -88,16 +90,24 @@ public class ListaProdutosAdaptador extends BaseAdapter
             tvPrecoProduto = view.findViewById(R.id.tvPrecoProduto);
             tvMarcaProduto = view.findViewById(R.id.tvMarcaProduto);
             imgProduto = view.findViewById(R.id.ivProdutoLista);
+            btnAdicionar = view.findViewById(R.id.btnItemProdutoAdicionar);
         }
 
 
         public void update(Produto produto)
         {
             tvNomeProduto.setText(produto.getNome());
-            tvPrecoProduto.setText(produto.getPreco() + "");
+            tvPrecoProduto.setText(produto.getPreco() + "€");
             tvMarcaProduto.setText(produto.getMarca().getNome());
             //load the image via a url with glyde
             Glide.with(context).load(SingletonPalheiro.mURLAPIProdutoImage + produto.getOneImage().getFicheiro()).placeholder(R.drawable.programarandroid2).into(imgProduto);
+
+            btnAdicionar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    SingletonPalheiro.getInstance(context).addLinhaCarrinhoAPI(produto.getId(), context);
+                }
+            });
 
         }
     }

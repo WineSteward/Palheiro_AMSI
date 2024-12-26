@@ -41,10 +41,10 @@ public class ListasComprasFragment extends Fragment implements ListasComprasList
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_listas_compras, container, false);
 
-
         setHasOptionsMenu(true);
 
         lvListasCompras = view.findViewById(R.id.lvlistaCompras);
+        fabLista = view.findViewById(R.id.fabLista);
 
         //registar no singleton para obter resposta
         SingletonPalheiro.getInstance(getContext()).setListasComprasListener(this);
@@ -60,9 +60,6 @@ public class ListasComprasFragment extends Fragment implements ListasComprasList
                 startActivityForResult(intent, EDIT);
             }
         });
-
-
-        fabLista = view.findViewById(R.id.fabLista);
 
         fabLista.setOnClickListener(new View.OnClickListener() { //clicar no +
             @Override
