@@ -33,6 +33,8 @@ public class CupoesFragment extends Fragment implements CupaoListener {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_cupoes, container, false);
 
+        setHasOptionsMenu(true);
+
         lvCupoes = view.findViewById(R.id.lvCupoes);
 
         SingletonPalheiro.getInstance(getContext()).setCupaoListener(this);

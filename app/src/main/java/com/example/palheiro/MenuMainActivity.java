@@ -135,6 +135,13 @@ public class MenuMainActivity extends AppCompatActivity implements  NavigationVi
         }
         else if(item.getItemId()== R.id.navPerfil)
         {
+            fragment = new CupoesFragment();
+
+            setTitle(item.getTitle());
+
+        }
+        else if(item.getItemId()== R.id.navPerfil)
+        {
             fragment = new PerfilFragment();
 
             setTitle(item.getTitle());

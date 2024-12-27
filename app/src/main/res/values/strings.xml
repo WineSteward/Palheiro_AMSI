@@ -108,4 +108,5 @@
     <string name="txtLabelProfileCodigoPostal">Codigo Postal:</string>
     <string name="txtProfileBtnGuardar">Guardar</string>
     <string name="txtItemCupaoNome">Nome Cupão</string>
+    <string name="txtCupoesMenu">Cupões</string>
 </resources>

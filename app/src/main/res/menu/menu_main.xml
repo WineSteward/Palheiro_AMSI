@@ -22,6 +22,11 @@
             android:id="@+id/navEncomendas"
             android:icon="@drawable/ic_action_encomenda"/>
 
+        <item android:title="@string/txtCupoesMenu"
+            android:id="@+id/navCupoes"
+            android:icon="@drawable/ic_action_cupao"/>
+
+
         <item android:title="@string/txtNavPerfil"
             android:id="@+id/navPerfil"
             android:icon="@drawable/ic_action_perfil"/>

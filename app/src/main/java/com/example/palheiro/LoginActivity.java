@@ -109,6 +109,11 @@ public class LoginActivity extends AppCompatActivity implements AuthListener {
         finish(); //impossivel retornar a esta atividade
     }
 
+    @Override
+    public void onUpdateSignin(Context context, String res) {
+
+    }
+
     public void onClickSettings(View view) {
 
         Intent intent = new Intent(this, ServidorActivity.class);

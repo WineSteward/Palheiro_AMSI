@@ -107,7 +107,7 @@ public class ProdutosFragment extends Fragment implements ProdutosListener {
         });
     }
 
-    //method to filter products based on categoria or nome and both
+    //method to filter products based on categoria or nome or both
     private void filterAndDisplayProducts() {
         ArrayList<Produto> filteredProdutos = new ArrayList<>();
 

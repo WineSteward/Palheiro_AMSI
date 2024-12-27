@@ -1042,7 +1042,7 @@ public class SingletonPalheiro
         }
     }
 
-   /* public void signInProfileAPI(final Userprofile profile, final Context context)
+    public void signinUserAPI(final Context context, final UserProfile profile)
     {
         if(! isConnectionInternet(context))
         {
@@ -1051,18 +1051,37 @@ public class SingletonPalheiro
         }
         else
         {
-            StringRequest reqInsert = new StringRequest(Request.Method.POST, mURLAPIListaCompras, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
+            JSONObject profileJson = new JSONObject();
+            try
+            {
+                profileJson.put("username", profile.getUsername());
+                profileJson.put("email", profile.getEmail());
+                profileJson.put("NIF", profile.getNif());
+                profileJson.put("password", profile.getPassword());
+                profileJson.put("morada2", profile.getMorada2());
+                profileJson.put("morada", profile.getMorada());
+                profileJson.put("codigoPostal", profile.getCodigoPostal());
 
+            } catch (JSONException e)
+            {
+                throw new RuntimeException(e);
+            }
+
+
+            JsonObjectRequest reqInsert = new JsonObjectRequest(Request.Method.POST, mURLAPIProfile+"/new",profileJson, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
                     //handle success call to API
 
-                    ListaCompras listaCompras = ListaComprasJsonParser.parserJsonListaCompras(response); //parse de JSON para Modelo
-                    addListaComprasBD(listaCompras); //adicionar ao Array das listas de compras
+                    String res;
+                    try {
+                        res = response.getString("response");
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
 
-                    //atualizar a vista
-                    if(listaComprasListener != null)
-                        listaComprasListener.onRefreshListasCompras(ListasComprasFragment.ADD);
+                    if(authListener != null)
+                        authListener.onUpdateSignin(context, res);
 
                 }
             }, new Response.ErrorListener() {
@@ -1078,8 +1097,6 @@ public class SingletonPalheiro
                 protected Map<String, String> getParams()
                 {
                     Map<String, String> params = new HashMap<>();
-                    params.put("titulo", listaCompras.getTitulo());
-                    params.put("descricao", listaCompras.getDescricao());
                     params.put("access-token", TOKEN);
                     return params;
                 }
@@ -1087,7 +1104,7 @@ public class SingletonPalheiro
             volleyQueue.add(reqInsert);
         }
     }
-*/
+
     //endregion
 
     //region - Metodos Pagamento
@@ -1168,8 +1185,6 @@ public class SingletonPalheiro
         return new ArrayList<>(metodosExpedicao);
     }
     //endregion
-
-
 
 
     //region - Cupao

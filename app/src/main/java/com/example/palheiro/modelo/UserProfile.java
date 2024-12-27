@@ -3,7 +3,7 @@ package com.example.palheiro.modelo;
 public class UserProfile
 {
     private int id;
-    private String nif, morada, morada2, codigoPostal, username, email;
+    private String nif, morada, morada2, codigoPostal, username, email, password;
 
     public UserProfile(int id, String nif, String morada, String morada2, String codigoPostal, String username, String email) {
         this.id = id;
@@ -13,6 +13,24 @@ public class UserProfile
         this.codigoPostal = codigoPostal;
         this.username = username;
         this.email = email;
+    }
+
+    public UserProfile(String password, String nif, String morada, String morada2, String codigoPostal, String username, String email) {
+        this.password = password;
+        this.nif = nif;
+        this.morada = morada;
+        this.morada2 = morada2;
+        this.codigoPostal = codigoPostal;
+        this.username = username;
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public int getId() {
