@@ -32,23 +32,22 @@ public class CarrinhoAdaptador extends BaseAdapter
 
     @Override
     public int getCount() {
-        return 0;
+        return linhasCarrinho.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return null;
+        return linhasCarrinho.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return position;
     }
 
     //atualizar a listview sobre o novo estado da linha do carrinho
     // (se qtdd da linha for 0, remover linha da listview do carrinho)
-    public void updateItemInAdapter(LinhaCarrinho linhaCarrinho)
-    {
+    public void updateItemInAdapter(LinhaCarrinho linhaCarrinho) {
         for (int i = 0; i < linhasCarrinho.size(); i++)
         {
             if (linhasCarrinho.get(i).getId() == linhaCarrinho.getId())
@@ -56,15 +55,14 @@ public class CarrinhoAdaptador extends BaseAdapter
                 if (linhaCarrinho.getQuantidade() == 0)
                 {
                     linhasCarrinho.remove(i);
-                    notifyDataSetChanged();
-                    return;
                 }
                 else
                 {
+                    linhaCarrinho.setTotal(linhaCarrinho.getQuantidade() * linhaCarrinho.getPrecoUnitario());
                     linhasCarrinho.set(i, linhaCarrinho);
-                    notifyDataSetChanged();
-                    return;
                 }
+                notifyDataSetChanged();
+                return;
             }
         }
         notifyDataSetChanged();
@@ -98,7 +96,7 @@ public class CarrinhoAdaptador extends BaseAdapter
         }
 
         //update do conteudo das componentes pois ja estao inicializadas
-        viewHolder.update(linhasCarrinho.get(i)); //i é a posicao da lista compras
+        viewHolder.update(linhasCarrinho.get(i), context); //i é a posicao da lista compras
 
         return view;
     }
@@ -123,11 +121,11 @@ public class CarrinhoAdaptador extends BaseAdapter
         }
 
 
-        public void update(LinhaCarrinho linhaCarrinho)
+        public void update(LinhaCarrinho linhaCarrinho, Context context)
         {
             Glide.with(context).load(SingletonPalheiro.mURLAPIProdutoImage + linhaCarrinho.getProduto().getOneImage().getFicheiro()).placeholder(R.drawable.programarandroid2).into(ivImagemItemCarrinho);
             tvNomeItemCarrinho.setText(linhaCarrinho.getProduto().getNome());
-            tvQuantidadeItemCarrinho.setText(linhaCarrinho.getQuantidade());
+            tvQuantidadeItemCarrinho.setText(linhaCarrinho.getQuantidade()+"");
             tvMarcaItemCarrinho.setText(linhaCarrinho.getProduto().getMarca().getNome());
             tvTotalItemCarrinho.setText(linhaCarrinho.getTotal()+"€");
 

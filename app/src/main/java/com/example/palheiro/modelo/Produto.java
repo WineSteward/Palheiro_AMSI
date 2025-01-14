@@ -15,6 +15,16 @@ public class Produto
     private String nome, descricao;
     private ArrayList<Imagem> imagens;
 
+    public Produto(int id, String nome, float preco, int quantidade, ArrayList<Imagem> imagens, Marca marca)
+    {
+        this.id = id;
+        this.nome = nome;
+        this.preco = preco;
+        this.quantidade = quantidade;
+        this.imagens = imagens;
+        this.marca = marca;
+    }
+
     public Produto(int id, Categoria categoria, Iva iva, Marca marca, ValorNutricional valornutricional, int quantidade, float preco, String nome, String descricao, ArrayList<Imagem> imagens)
     {
         this.id = id;

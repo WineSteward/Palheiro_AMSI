@@ -43,7 +43,7 @@ public class DetalhesFaturaActivity extends AppCompatActivity {
     private void carregarFatura()
     {
         setTitle("Fatura");
-        tvNumeroFatura.setText(fatura.getId());
+        tvNumeroFatura.setText(fatura.getId()+"");
         tvTotal.setText(fatura.getTotal() + "€");
         tvMetodoExpedicao.setText(fatura.getMetodoExpedicaoNome());
         tvMetodoPagamento.setText(fatura.getMetodoPagamentoNome());

@@ -58,7 +58,8 @@ public class PerfilFragment extends Fragment implements ProfileListener {
     }
 
     @Override
-    public void onRefreshProfile(UserProfile profile) {
+    public void onRefreshProfile(UserProfile profile)
+    {
         tvUsername.setText(profile.getUsername());
         tvEmail.setText(profile.getEmail());
         tvNIF.setText(profile.getNif());
@@ -68,7 +69,8 @@ public class PerfilFragment extends Fragment implements ProfileListener {
     }
 
     @Override
-    public void onUpdateProfile(Context context) {
+    public void onUpdateProfile(Context context)
+    {
         Toast.makeText(context, "Perfil editado com sucesso", Toast.LENGTH_SHORT).show();
     }
 }

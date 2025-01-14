@@ -51,7 +51,7 @@ public class ProdutoJsonParser
                 int ivaId = ivaJson.getInt("id");
                 int ivaValorPorcentagem = ivaJson.getInt("valorPorcentagem");
 
-                JSONObject valorNutricionalJson = produtoJson.getJSONObject("iva");
+                JSONObject valorNutricionalJson = produtoJson.getJSONObject("valornutricional");
                 int valorNutricionalId = valorNutricionalJson.getInt("id");
                 String valorNutricionalNome = valorNutricionalJson.getString("nome");
 
@@ -84,8 +84,6 @@ public class ProdutoJsonParser
                     }
                 }
 
-                //endregion
-
                 Categoria categoria = new Categoria(categoriaId, categoriaNome);
 
                 Iva iva = new Iva(ivaId, ivaValorPorcentagem);
@@ -94,7 +92,6 @@ public class ProdutoJsonParser
 
                 ValorNutricional valorNutricional = new ValorNutricional(valorNutricionalId, valorNutricionalNome);
 
-                //add the product to the array of the singleton for singularity purposes
                 produtos.add(new Produto(id, categoria, iva, marca, valorNutricional, quantidade, preco, nome, descricao, imagens));
 
             }
@@ -163,8 +160,6 @@ public class ProdutoJsonParser
                 }
             }
 
-            //endregion
-
             Categoria categoria = new Categoria(categoriaId, categoriaNome);
 
             Iva iva = new Iva(ivaId, ivaValorPorcentagem);
@@ -182,31 +177,60 @@ public class ProdutoJsonParser
         }
     }
 
-    public static String parserJsonLogin(String response)
+    public static Produto parserJsonProdutoSimple(JSONObject produtoJson)
     {
-        String token = null;
-
         try
         {
-            JSONObject tokenJson = new JSONObject(response);
 
-            token = tokenJson.getString("token");
+            int id = produtoJson.getInt("id");
+            String nome = produtoJson.getString("nome");
+            float preco = (float) produtoJson.getDouble("preco");
+            int quantidade = produtoJson.getInt("quantidade");
+
+            JSONObject marcaJson = produtoJson.getJSONObject("marca");
+            int marcaId = marcaJson.getInt("id");
+            String marcaNome = marcaJson.getString("nome");
+
+            Marca marca = new Marca(marcaId, marcaNome);
+
+            // Create the objects that compromise a product
+            ArrayList<Imagem> imagens = new ArrayList<>();
+
+            //region - imagens json parser
+            JSONArray imagensJsonArray = produtoJson.getJSONArray("imagens");
+
+            // Iterate through the JSONArray
+            for (int j = 0; j < imagensJsonArray.length(); j++) {
+                try
+                {
+                    // Get each image as a JSONObject
+                    JSONObject imagemJson = imagensJsonArray.getJSONObject(j);
+
+                    // Extract fields from the image JSON object
+                    int imagemId = imagemJson.getInt("id");
+                    String imagemFicheiro = imagemJson.getString("ficheiro");
+
+                    // Create an Image object
+                    Imagem imagem = new Imagem(id, imagemFicheiro);
+
+                    // Add the Image object to the array
+                    imagens.add(imagem);
+                }
+                catch (JSONException e)
+                {
+                    throw new RuntimeException(e);
+                }
+            }
+
+            return new Produto(id, nome, preco, quantidade, imagens, marca);
+
         }
         catch (JSONException e)
         {
             throw new RuntimeException(e);
         }
-
-        return token;
     }
 
-    public static boolean isConnectionInternet(Context context)
-    {
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        NetworkInfo ni = cm.getActiveNetworkInfo();
-        return ni != null && ni.isConnectedOrConnecting();
-    }
 
 }
 

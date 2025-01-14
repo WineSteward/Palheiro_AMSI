@@ -2,6 +2,7 @@ package com.example.palheiro.listeners;
 
 import android.content.Context;
 
+import com.example.palheiro.modelo.Carrinho;
 import com.example.palheiro.modelo.LinhaCarrinho;
 import com.example.palheiro.modelo.MetodoExpedicao;
 import com.example.palheiro.modelo.MetodoPagamento;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 
 public interface CarrinhoListener
 {
-    void onRefreshCarrinho(ArrayList<LinhaCarrinho> linhasCarrinho);
+    void onRefreshCarrinho(Carrinho carrinho);
     void onRefreshMetodosPagamento(ArrayList<MetodoPagamento> metodosPagamento, Context context);
     void onRefreshMetodosExpedicao(ArrayList<MetodoExpedicao> metodosExpedicao, Context context);
     void onCupaoResponse(boolean isValid, double value, Context context);

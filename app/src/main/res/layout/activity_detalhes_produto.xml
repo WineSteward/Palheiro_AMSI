@@ -33,6 +33,7 @@
         android:layout_height="wrap_content"
         android:textAlignment="center"
         android:text="@string/txtNomeDetalhes"
+        android:textColor="@color/black"
         android:textSize="24sp"
         android:textStyle="bold"
         android:layout_marginBottom="8dp" />
@@ -47,6 +48,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/txtDescricaoTituloDetalhes"
+        android:textColor="@color/black"
         android:textSize="18sp"
         android:textStyle="bold"
         android:layout_marginBottom="4dp" />
@@ -57,6 +59,7 @@
         android:layout_height="0dp"
         android:layout_weight="0.2"
         android:text="@string/txtDescricaoDetalhes"
+        android:textColor="@color/black"
         android:textSize="16sp"
         android:layout_marginBottom="8dp" />
 
@@ -70,6 +73,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/txtLabelValorNutricionalDelhtalhes"
+        android:textColor="@color/black"
         android:textSize="18sp"
         android:textStyle="bold"
         android:layout_marginBottom="4dp" />
@@ -78,6 +82,7 @@
         android:id="@+id/tvValorNutricionalDetalhes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/black"
         android:text="@string/txtValorNutricionalDetalhes"
         android:textSize="16sp"
         android:layout_marginBottom="8dp" />
@@ -93,6 +98,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"
+        android:textColor="@color/black"
         android:text="@string/txtPrecoDetalhes"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -109,6 +115,7 @@
         android:layout_height="wrap_content"
         android:text="@string/txtaddCarrinho"
         android:textSize="18sp"
+        android:textColor="@color/white"
         android:textStyle="bold"
         android:onClick="onClickAddCarrinho"
         android:layout_gravity="center" />

@@ -3,6 +3,7 @@ package com.example.palheiro.modelo;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -67,26 +68,27 @@ public class SingletonPalheiro
     private ListaCompras listaCompras;
     private UserProfile profile;
 
-    private static String IP = "172.22.21.209"; //IP do servidor
+    private static String IP = "http://192.168.1.71/palheiroAPI/backend/web/";
+    // "172.22.21.209"; //IP do servidor
 
     //region - API endpoits
-    public static final String mURLAPIProdutos = IP + "/palheiro/backend/web/api/produto";
-    public static final String mURLAPIProdutoImage = IP + "/palheiro/backend/web/image/products&imageName=";
-    public static final String mURLAPILogin = IP + "/palheiro/backend/web/api/auth/login";
-    public static final String mURLAPILogout = IP + "/palheiro/backend/web/api/auth/logout";
-    public static final String mURLAPIListaCompras = IP + "/palheiro/backend/web/api/listaCompras";
-    public static final String mURLAPICarrinho = IP + "/palheiro/backend/web/api/carrinho";
-    public static final String mURLAPICategoria = IP + "/palheiro/backend/web/api/categoria";
-    public static final String mURLAPIFaturas = IP + "/palheiro/backend/web/api/fatura";
-    public static final String mURLAPICupoes = IP + "/palheiro/backend/web/api/cupao";
-    public static final String mURLAPIMetodosPagamento = IP + "/palheiro/backend/web/api/metodopagamento";
-    public static final String mURLAPIMetodosExpedicao = IP + "/palheiro/backend/web/api/metodoexpedicao";
-    public static final String mURLAPIEncomendas = IP + "palheiro/backend/web/api/encomenda";
-    public static final String mURLAPIProfile = IP + "palheiro/backend/web/api/userprofile";
+    public static final String mURLAPIProdutos = IP + "api/produto/";
+    public static final String mURLAPIProdutoImage = IP + "products/";
+    public static final String mURLAPILogin = IP + "api/auth/login";
+    public static final String mURLAPILogout = IP + "api/auth/logout";
+    public static final String mURLAPIListaCompras = IP + "api/listacompra/";
+    public static final String mURLAPICarrinho = IP + "api/carrinho/";
+    public static final String mURLAPICategoria = IP + "api/categoria/";
+    public static final String mURLAPIFaturas = IP + "api/fatura/";
+    public static final String mURLAPICupoes = IP + "api/cupao/";
+    public static final String mURLAPIMetodosPagamento = IP + "api/metodopagamento/";
+    public static final String mURLAPIMetodosExpedicao = IP + "api/metodoexpedicao/";
+    public static final String mURLAPIEncomendas = IP + "api/encomenda/";
+    public static final String mURLAPIProfile = IP + "api/userprofile/";
 
     //endregion
     private static RequestQueue volleyQueue = null;
-    private static final String TOKEN = "Receive token from successful api call to login";
+    private static String TOKEN = "Receive token from successful api call to login";
 
     private EncomendasListener encomendasListener;
     private CarrinhoListener carrinhoListener;
@@ -183,6 +185,15 @@ public class SingletonPalheiro
             serverListener.onUpdateServerIP(context);
     }
 
+    public void setTOKEN(String newToken, Context context)
+    {
+        TOKEN = newToken;
+    }
+
+    public String getTOKEN()
+    {
+        return TOKEN;
+    }
 
     //region - auth API
 
@@ -202,6 +213,7 @@ public class SingletonPalheiro
 
                     String token = AuthJsonParser.parserJsonLogin(response);
 
+
                     //atualizar a vista
                     if(authListener != null)
                         authListener.onUpdateLogin(token);
@@ -221,53 +233,6 @@ public class SingletonPalheiro
                     Map<String, String> params = new HashMap<>();
                     params.put("username", username);
                     params.put("password", password);
-                    return params;
-                }
-            };
-            volleyQueue.add(reqInsert);
-        }
-    }
-
-    public void singupAPI(Context context, String email, String password, String username, String morada, String morada2, String NIF, String codigoPostal)
-    {
-        if(! ListaComprasJsonParser.isConnectionInternet(context))
-        {
-            //nao tem ligacao a internet
-            Toast.makeText(context, "Sem Internet", Toast.LENGTH_SHORT).show();
-        }
-        else {
-            StringRequest reqInsert = new StringRequest(Request.Method.POST, mURLAPILogin, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-
-                    //handle success call to API
-
-                    String token = AuthJsonParser.parserJsonSignIn(response);
-
-                    //atualizar a vista
-                    if(authListener != null)
-                        authListener.onUpdateLogin(token);
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    //something went wrong
-                    Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            })
-            {
-                @Nullable
-                @Override
-                protected Map<String, String> getParams()
-                {
-                    Map<String, String> params = new HashMap<>();
-                    params.put("email", email);
-                    params.put("password", password);
-                    params.put("username", username);
-                    params.put("NIF", NIF);
-                    params.put("morada", morada);
-                    params.put("morada2", morada2);
-                    params.put("codigoPostal", codigoPostal);
                     return params;
                 }
             };
@@ -288,7 +253,7 @@ public class SingletonPalheiro
         }
         else
         {
-            JsonArrayRequest reqSelect = new JsonArrayRequest(Request.Method.GET, mURLAPIProdutos+"/all", null, new Response.Listener<JSONArray>() {
+            JsonArrayRequest reqSelect = new JsonArrayRequest(Request.Method.GET, mURLAPIProdutos+"all?acess-token="+TOKEN, null, new Response.Listener<JSONArray>() {
                 @Override
                 public void onResponse(JSONArray response) {
 
@@ -307,17 +272,7 @@ public class SingletonPalheiro
                 public void onErrorResponse(VolleyError error) {
                     Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
                 }
-            })
-            {
-                @Nullable
-                @Override
-                protected Map<String, String> getParams()
-                {
-                    Map<String, String> params = new HashMap<>();
-                    params.put("access-token", TOKEN);
-                    return params;
-                }
-            };
+            });
             volleyQueue.add(reqSelect);
         }
     }
@@ -351,7 +306,7 @@ public class SingletonPalheiro
         }
         else
         {
-            JsonArrayRequest reqSelect = new JsonArrayRequest(Request.Method.GET, mURLAPICategoria+"/all", null, new Response.Listener<JSONArray>() {
+            JsonArrayRequest reqSelect = new JsonArrayRequest(Request.Method.GET, mURLAPICategoria+"all?acess-token="+TOKEN, null, new Response.Listener<JSONArray>() {
                 @Override
                 public void onResponse(JSONArray response) {
 
@@ -370,17 +325,7 @@ public class SingletonPalheiro
                 public void onErrorResponse(VolleyError error) {
                     Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
                 }
-            })
-            {
-                @Nullable
-                @Override
-                protected Map<String, String> getParams()
-                {
-                    Map<String, String> params = new HashMap<>();
-                    params.put("access-token", TOKEN);
-                    return params;
-                }
-            };
+            });
             volleyQueue.add(reqSelect);
         }
     }
@@ -447,59 +392,42 @@ public class SingletonPalheiro
 
         public void getAllListasComprasAPI(final Context context)
         {
-        if(! isConnectionInternet(context))
-        {
-            //nao tem ligacao a internet
-            Toast.makeText(context, "Sem Internet", Toast.LENGTH_SHORT).show();
+            if (!isConnectionInternet(context)) {
+                //nao tem ligacao a internet
+                Toast.makeText(context, "Sem Internet", Toast.LENGTH_SHORT).show();
 
-            //offline only
-            listasCompras = getListasComprasBD();
+                //offline only
+                listasCompras = getListasComprasBD();
 
-            //atualizar a vista
-            if(listasComprasListener != null)
-            {
-                listasComprasListener.onRefreshListasCompras(listasCompras);
+                //atualizar a vista
+                if (listasComprasListener != null) {
+                    listasComprasListener.onRefreshListasCompras(listasCompras);
+                }
+            } else {
+                JsonArrayRequest reqSelect = new JsonArrayRequest(Request.Method.GET, mURLAPIListaCompras + "all?access-token=" + TOKEN, null, new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        //handle success call to API
+
+                        listasCompras = ListaComprasJsonParser.parserJsonListasCompras(response);
+
+                        //offline only
+                        addListasComprasBD(listasCompras);
+
+                        //atualizar a vista
+                        if (listaComprasListener != null) {
+                            listasComprasListener.onRefreshListasCompras(listasCompras);
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+                volleyQueue.add(reqSelect);
             }
         }
-        else
-        {
-            JsonArrayRequest reqSelect = new JsonArrayRequest(Request.Method.GET, mURLAPIListaCompras+"/all", null, new Response.Listener<JSONArray>() {
-                @Override
-                public void onResponse(JSONArray response)
-                {
-                    //handle success call to API
-
-                    listasCompras = ListaComprasJsonParser.parserJsonListasCompras(response);
-
-                    //offline only
-                    addListasComprasBD(listasCompras);
-
-                    //atualizar a vista
-                    if(listaComprasListener != null)
-                    {
-                        listasComprasListener.onRefreshListasCompras(listasCompras);
-                    }
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error)
-                {
-                    Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            })
-            {
-                @Nullable
-                @Override
-                protected Map<String, String> getParams()
-                {
-                    Map<String, String> params = new HashMap<>();
-                    params.put("access-token", TOKEN);
-                    return params;
-                }
-            };
-            volleyQueue.add(reqSelect);
-        }
-    }
 
         public void addListaComprasAPI(final ListaCompras listaCompras, final Context context)
         {
@@ -511,7 +439,18 @@ public class SingletonPalheiro
             }
             else
             {
-                JsonObjectRequest reqInsert = new JsonObjectRequest(Request.Method.POST, mURLAPIListaCompras, null, new Response.Listener<JSONObject>() {
+                JSONObject listaCompraJson = new JSONObject();
+                try
+                {
+                    listaCompraJson.put("titulo", listaCompras.getTitulo());
+                    listaCompraJson.put("descricao", listaCompras.getDescricao());
+
+                } catch (JSONException e)
+                {
+                    throw new RuntimeException(e);
+                }
+
+                JsonObjectRequest reqInsert = new JsonObjectRequest(Request.Method.POST, mURLAPIListaCompras+"add?access-token="+TOKEN, listaCompraJson, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response)
                     {
@@ -531,19 +470,7 @@ public class SingletonPalheiro
                         //something went wrong
                         Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
                     }
-                })
-                {
-                    @Nullable
-                    @Override
-                    protected Map<String, String> getParams()
-                    {
-                        Map<String, String> params = new HashMap<>();
-                        params.put("titulo", listaCompras.getTitulo());
-                        params.put("descricao", listaCompras.getDescricao());
-                        params.put("access-token", TOKEN);
-                        return params;
-                    }
-                };
+                });
                 volleyQueue.add(reqInsert);
             }
         }
@@ -555,8 +482,20 @@ public class SingletonPalheiro
                 //nao tem ligacao a internet
                 Toast.makeText(context, "Sem Internet", Toast.LENGTH_SHORT).show();
             }
-            else {
-                StringRequest reqUpdate = new StringRequest(Request.Method.PUT, mURLAPIListaCompras+"/"+listaCompras.getId(), new Response.Listener<String>() {
+            else
+            {
+                JSONObject listaCompraJson = new JSONObject();
+                try
+                {
+                    listaCompraJson.put("titulo", listaCompras.getTitulo());
+                    listaCompraJson.put("descricao", listaCompras.getDescricao());
+
+                } catch (JSONException e)
+                {
+                    throw new RuntimeException(e);
+                }
+
+                StringRequest reqUpdate = new StringRequest(Request.Method.PUT, mURLAPIListaCompras+"id/"+listaCompras.getId()+"?access-token="+TOKEN, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
 
@@ -573,19 +512,7 @@ public class SingletonPalheiro
                         //something went wrong
                         Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
                     }
-                })
-                {
-                    @Nullable
-                    @Override
-                    protected Map<String, String> getParams()
-                    {
-                        Map<String, String> params = new HashMap<>();
-                        params.put("titulo", listaCompras.getTitulo());
-                        params.put("descricao", listaCompras.getDescricao());
-                        params.put("access-token", TOKEN);
-                        return params;
-                    }
-                };
+                });
                 volleyQueue.add(reqUpdate);
             }
         }
@@ -599,7 +526,7 @@ public class SingletonPalheiro
             }
             else
             {
-                StringRequest reqDelete = new StringRequest(Request.Method.DELETE, mURLAPIListaCompras+"/"+listaCompras.getId(), new Response.Listener<String>() {
+                StringRequest reqDelete = new StringRequest(Request.Method.DELETE, mURLAPIListaCompras+"/"+listaCompras.getId()+"?access-token="+TOKEN, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
 
@@ -618,17 +545,7 @@ public class SingletonPalheiro
                         Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
 
                     }
-                })
-                {
-                    @Nullable
-                    @Override
-                    protected Map<String, String> getParams()
-                    {
-                        Map<String, String> params = new HashMap<>();
-                        params.put("access-token", TOKEN);
-                        return params;
-                    }
-                };
+                });
                 volleyQueue.add(reqDelete);
             }
         }
@@ -649,7 +566,7 @@ public class SingletonPalheiro
         }
         else
         {
-            JsonObjectRequest reqSelect = new JsonObjectRequest(Request.Method.GET, mURLAPICarrinho, null, new Response.Listener<JSONObject>() {
+            JsonObjectRequest reqSelect = new JsonObjectRequest(Request.Method.GET, mURLAPICarrinho+"my?access-token="+TOKEN, null, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response)
                 {
@@ -660,7 +577,7 @@ public class SingletonPalheiro
                     //atualizar a vista
                     if(carrinhoListener != null)
                     {
-                        carrinhoListener.onRefreshCarrinho(carrinho.getLinhasCarrinho());
+                        carrinhoListener.onRefreshCarrinho(carrinho);
                     }
                 }
             }, new Response.ErrorListener() {
@@ -693,7 +610,7 @@ public class SingletonPalheiro
         }
         else
         {
-            StringRequest reqInsert = new StringRequest(Request.Method.POST, mURLAPICarrinho+"/id/"+produto_id, new Response.Listener<String>() {
+            StringRequest reqInsert = new StringRequest(Request.Method.POST, mURLAPICarrinho+"id/"+produto_id+"?access-token="+TOKEN, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response)
                 {
@@ -743,7 +660,7 @@ public class SingletonPalheiro
                 throw new RuntimeException(e);
             }
 
-            JsonObjectRequest reqUpdate = new JsonObjectRequest(Request.Method.PUT, mURLAPICarrinho+"/id/"+linhaCarrinho.getId(), quantidadeJson, new Response.Listener<JSONObject>() {
+            JsonObjectRequest reqUpdate = new JsonObjectRequest(Request.Method.PUT, mURLAPICarrinho+"id/"+linhaCarrinho.getId()+"?access-token="+TOKEN, quantidadeJson, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response)
                 {
@@ -767,20 +684,14 @@ public class SingletonPalheiro
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    //something went wrong
-                    Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
+                    if (error.networkResponse != null) {
+                        Log.e("EditLinhaCarrinhoAPI", "Status Code: " + error.networkResponse.statusCode);
+                        Log.e("EditLinhaCarrinhoAPI", "Error: " + new String(error.networkResponse.data));
+                    } else {
+                        Log.e("EditLinhaCarrinhoAPI", "Request Failed: " + error.getMessage());
+                    }
                 }
-            })
-            {
-                @Nullable
-                @Override
-                protected Map<String, String> getParams()
-                {
-                    Map<String, String> params = new HashMap<>();
-                    params.put("access-token", TOKEN);
-                    return params;
-                }
-            };
+            });
             volleyQueue.add(reqUpdate);
         }
     }
@@ -807,7 +718,7 @@ public class SingletonPalheiro
         }
         else
         {
-            JsonArrayRequest reqSelect = new JsonArrayRequest(Request.Method.GET, mURLAPIEncomendas, null, new Response.Listener<JSONArray>() {
+            JsonArrayRequest reqSelect = new JsonArrayRequest(Request.Method.GET, mURLAPIEncomendas+"all?access-token="+TOKEN, null, new Response.Listener<JSONArray>() {
                 @Override
                 public void onResponse(JSONArray response)
                 {
@@ -827,17 +738,7 @@ public class SingletonPalheiro
                     Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
 
                 }
-            })
-            {
-                @Nullable
-                @Override
-                protected Map<String, String> getParams()
-                {
-                    Map<String, String> params = new HashMap<>();
-                    params.put("access-token", TOKEN);
-                    return params;
-                }
-            };
+            });
             volleyQueue.add(reqSelect);
         }
     }
@@ -863,8 +764,7 @@ public class SingletonPalheiro
         {
             JSONObject faturaJson = FaturaJsonParser.parseToJsonFatura(metodoPagamento, metodoExpedicao, cupao);
 
-
-            JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, mURLAPIFaturas+"/new", faturaJson,
+            JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, mURLAPIFaturas+"new?acess-token="+TOKEN, faturaJson,
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
@@ -893,14 +793,7 @@ public class SingletonPalheiro
                         public void onErrorResponse(VolleyError error) {
 
                         }
-                    }) {
-                @Override
-                public Map<String, String> getParams() {
-                    Map<String, String> params = new HashMap<>();
-                    params.put("access-token", TOKEN);
-                    return params;
-                }
-            };
+                    });
 
             volleyQueue.add(postRequest);
         }
@@ -920,7 +813,7 @@ public class SingletonPalheiro
         }
         else
         {
-            JsonArrayRequest reqSelect = new JsonArrayRequest(Request.Method.GET, mURLAPIFaturas+"/all", null, new Response.Listener<JSONArray>() {
+            JsonArrayRequest reqSelect = new JsonArrayRequest(Request.Method.GET, mURLAPIFaturas+"all?access-token="+TOKEN, null, new Response.Listener<JSONArray>() {
                 @Override
                 public void onResponse(JSONArray response)
                 {
@@ -939,17 +832,7 @@ public class SingletonPalheiro
                     Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
 
                 }
-            })
-            {
-                @Nullable
-                @Override
-                protected Map<String, String> getParams()
-                {
-                    Map<String, String> params = new HashMap<>();
-                    params.put("access-token", TOKEN);
-                    return params;
-                }
-            };
+            });
             volleyQueue.add(reqSelect);
         }
     }
@@ -967,7 +850,7 @@ public class SingletonPalheiro
         }
         else
         {
-            JsonObjectRequest reqSelect = new JsonObjectRequest(Request.Method.GET, mURLAPIProfile + "/my", null, new Response.Listener<JSONObject>() {
+            JsonObjectRequest reqSelect = new JsonObjectRequest(Request.Method.GET, mURLAPIProfile + "my?access-token="+TOKEN, null, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     //handle api successful call
@@ -1010,7 +893,7 @@ public class SingletonPalheiro
                 throw new RuntimeException(e);
             }
 
-            JsonObjectRequest reqUpdate = new JsonObjectRequest(Request.Method.PUT, mURLAPIListaCompras+"/edit",profileJson, new Response.Listener<JSONObject>() {
+            JsonObjectRequest reqUpdate = new JsonObjectRequest(Request.Method.PUT, mURLAPIProfile+"edit?access-token="+TOKEN, profileJson, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
 
@@ -1027,17 +910,7 @@ public class SingletonPalheiro
                     //something went wrong
                     Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
                 }
-            })
-            {
-                @Nullable
-                @Override
-                protected Map<String, String> getParams()
-                {
-                    Map<String, String> params = new HashMap<>();
-                    params.put("access-token", TOKEN);
-                    return params;
-                }
-            };
+            });
             volleyQueue.add(reqUpdate);
         }
     }
@@ -1112,7 +985,7 @@ public class SingletonPalheiro
     {
         if(isConnectionInternet(context))
         {
-            JsonArrayRequest reqSelect = new JsonArrayRequest(Request.Method.GET, mURLAPIMetodosPagamento+"/all", null, new Response.Listener<JSONArray>() {
+            JsonArrayRequest reqSelect = new JsonArrayRequest(Request.Method.GET, mURLAPIMetodosPagamento+"all?access-token="+TOKEN, null, new Response.Listener<JSONArray>() {
                 @Override
                 public void onResponse(JSONArray response) {
 
@@ -1151,7 +1024,7 @@ public class SingletonPalheiro
     {
         if(isConnectionInternet(context))
         {
-            JsonArrayRequest reqSelect = new JsonArrayRequest(Request.Method.GET, mURLAPIMetodosExpedicao, null, new Response.Listener<JSONArray>()
+            JsonArrayRequest reqSelect = new JsonArrayRequest(Request.Method.GET, mURLAPIMetodosExpedicao+"all?access-token="+TOKEN, null, new Response.Listener<JSONArray>()
             {
                 @Override
                 public void onResponse(JSONArray response) {
@@ -1193,7 +1066,7 @@ public class SingletonPalheiro
     {
         if (isConnectionInternet(context))
         {
-            JsonObjectRequest reqSelect = new JsonObjectRequest(Request.Method.GET, mURLAPICupoes,null,
+            JsonObjectRequest reqSelect = new JsonObjectRequest(Request.Method.GET, mURLAPICupoes+"validate?access-token="+TOKEN+"&descontoNome="+cupao,null,
                     new Response.Listener<JSONObject>()
                     {
                         @Override
@@ -1227,18 +1100,7 @@ public class SingletonPalheiro
                         public void onErrorResponse(VolleyError error) {
 
                         }
-                    })
-            {
-                @Nullable
-                @Override
-                protected Map<String, String> getParams()
-                {
-                    Map<String, String> params = new HashMap<>();
-                    params.put("access-token", TOKEN);
-                    params.put("descontoNome", cupao);
-                    return params;
-                }
-            };
+                    });
 
             volleyQueue.add(reqSelect);
         }
@@ -1252,7 +1114,7 @@ public class SingletonPalheiro
     {
         if(isConnectionInternet(context))
         {
-            JsonArrayRequest reqSelect = new JsonArrayRequest(Request.Method.GET, mURLAPICupoes+"/all", null, new Response.Listener<JSONArray>()
+            JsonArrayRequest reqSelect = new JsonArrayRequest(Request.Method.GET, mURLAPICupoes+"all?access-token="+TOKEN, null, new Response.Listener<JSONArray>()
             {
                 @Override
                 public void onResponse(JSONArray response) {

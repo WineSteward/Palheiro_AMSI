@@ -23,6 +23,7 @@
                 android:text="@string/txtProfileUsername"
                 android:textSize="16sp"
                 android:textStyle="bold"
+                android:textColor="#000000"
                 android:layout_marginTop="8dp" />
 
             <TextView
@@ -30,6 +31,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
+                android:textColor="#000000"
                 android:layout_marginBottom="16dp" />
 
             <TextView
@@ -39,6 +41,7 @@
                 android:text="@string/LabelProfileEmail"
                 android:textSize="16sp"
                 android:textStyle="bold"
+                android:textColor="#000000"
                 android:layout_marginTop="8dp" />
 
             <TextView
@@ -46,6 +49,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
+                android:textColor="#000000"
                 android:layout_marginBottom="16dp" />
 
             <TextView
@@ -55,6 +59,7 @@
                 android:text="@string/txtLabelProfileNIF"
                 android:textSize="16sp"
                 android:textStyle="bold"
+                android:textColor="#000000"
                 android:layout_marginTop="8dp" />
 
             <TextView
@@ -62,6 +67,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
+                android:textColor="#000000"
                 android:layout_marginBottom="16dp" />
 
             <TextView
@@ -71,12 +77,14 @@
                 android:text="@string/txtLabelProfileMorada"
                 android:textSize="16sp"
                 android:textStyle="bold"
+                android:textColor="#000000"
                 android:layout_marginTop="8dp" />
 
             <EditText
                 android:id="@+id/etProfileMorada"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="#000000"
                 android:inputType="text"
                 android:layout_marginBottom="16dp" />
 
@@ -87,12 +95,14 @@
                 android:text="@string/txtLabelProfileMorada2"
                 android:textSize="16sp"
                 android:textStyle="bold"
+                android:textColor="#000000"
                 android:layout_marginTop="8dp" />
 
             <EditText
                 android:id="@+id/etProfileMorada2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="#000000"
                 android:inputType="text"
                 android:layout_marginBottom="16dp" />
 
@@ -103,11 +113,13 @@
                 android:text="@string/txtLabelProfileCodigoPostal"
                 android:textSize="16sp"
                 android:textStyle="bold"
+                android:textColor="#000000"
                 android:layout_marginTop="8dp" />
 
             <EditText
                 android:id="@+id/etProfileCodigoPostal"
                 android:layout_width="match_parent"
+                android:textColor="#000000"
                 android:layout_height="wrap_content"
                 android:inputType="textPostalAddress"
                 android:layout_marginBottom="16dp" />
@@ -117,6 +129,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/txtProfileBtnGuardar"
+                android:textColor="#FFFFFF"
+                android:backgroundTint="@color/palheiro_green"
                 android:layout_marginTop="16dp" />
         </LinearLayout>
     </ScrollView>

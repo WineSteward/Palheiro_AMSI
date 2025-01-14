@@ -2,11 +2,13 @@ package com.example.palheiro;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,6 +20,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.palheiro.adaptadores.ListaProdutosAdaptador;
@@ -57,7 +60,7 @@ public class ProdutosFragment extends Fragment implements ProdutosListener {
         SingletonPalheiro.getInstance(getContext()).getAllProdutosAPI(getContext());
         SingletonPalheiro.getInstance(getContext()).getAllCategoriasAPI(getContext());
 
-        lvProdutos.setOnItemClickListener(new AdapterView.OnItemClickListener() {//clicar num produto
+        lvProdutos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
@@ -151,7 +154,19 @@ public class ProdutosFragment extends Fragment implements ProdutosListener {
             Categoria defaultCategoria = new Categoria(-1, "Selecione uma categoria");
             categorias.add(0, defaultCategoria);
 
-            ArrayAdapter<Categoria> categoriaAdaptador = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, categorias);
+            ArrayAdapter<Categoria> categoriaAdaptador = new ArrayAdapter<Categoria>(context, android.R.layout.simple_spinner_item, categorias) {
+                @Override
+                public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                    // Inflate the dropdown view and customize the text color
+                    View view = super.getDropDownView(position, convertView, parent);
+                    TextView textView = (TextView) view.findViewById(android.R.id.text1);
+                    if (textView != null) {
+                        textView.setTextColor(Color.BLACK);  // Set the dropdown item text color
+                    }
+                    view.setBackgroundColor(Color.WHITE);
+                    return view;
+                }
+            };
             categoriaAdaptador.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinnerCategorias.setAdapter(categoriaAdaptador);
         }

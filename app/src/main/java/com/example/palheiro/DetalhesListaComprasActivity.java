@@ -129,8 +129,8 @@ public class DetalhesListaComprasActivity extends AppCompatActivity implements L
                 .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        SingletonPalheiro.getInstance(getApplicationContext()).deleteListaComprasAPI(listaCompras, getApplicationContext());
                         SingletonPalheiro.getInstance(getApplicationContext()).deleteListaComprasBD(listaCompras.getId());
-
                         setResult(Activity.RESULT_OK);
                         finish();
                     }

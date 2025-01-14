@@ -42,6 +42,8 @@ public class LoginActivity extends AppCompatActivity implements AuthListener {
 
         Resources res = getResources();
 
+        SingletonPalheiro.getInstance(getApplicationContext()).setAuthListener(this);
+
     }
 
     public void onClickLogin(View view)
@@ -59,12 +61,6 @@ public class LoginActivity extends AppCompatActivity implements AuthListener {
             etPassword.setError("Credenciais Incorretas");
             return;
         }
-
-        Intent intent = new Intent(this, MenuMainActivity.class);
-        intent.putExtra(USERNAME, txtUsername);
-
-        startActivity(intent);
-        finish(); //impossivel retornar a esta atividade
 
         SingletonPalheiro.getInstance(getApplicationContext()).loginAPI(getApplicationContext(), txtUsername, txtPassword);
     }

@@ -99,7 +99,6 @@ public class ListaProdutosAdaptador extends BaseAdapter
             tvNomeProduto.setText(produto.getNome());
             tvPrecoProduto.setText(produto.getPreco() + "€");
             tvMarcaProduto.setText(produto.getMarca().getNome());
-            //load the image via a url with glyde
             Glide.with(context).load(SingletonPalheiro.mURLAPIProdutoImage + produto.getOneImage().getFicheiro()).placeholder(R.drawable.programarandroid2).into(imgProduto);
 
             btnAdicionar.setOnClickListener(new View.OnClickListener() {

@@ -30,17 +30,17 @@ public class DetalhesFaturaAdaptador extends BaseAdapter
 
     @Override
     public int getCount() {
-        return 0;
+        return linhasFatura.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return null;
+        return linhasFatura.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return position;
     }
 
     @Override
@@ -88,16 +88,20 @@ public class DetalhesFaturaAdaptador extends BaseAdapter
 
         public void update(LinhaFatura linhaFatura, Context context)
         {
-            Produto produto = SingletonPalheiro.getInstance(context).getProduto(linhaFatura.getProdutoId());
-
-            if(produto.getNome() == null)
+            if(linhaFatura.isDiscountLine())
+            {
                 tvLvFaturaNomeProduto.setText(R.string.txtLvFaturaLinhaDescontoTitulo);
-            tvLvFaturaQuantidade.setText(linhaFatura.getQuantidade());
+            }
+            else {
+                Produto produto = SingletonPalheiro.getInstance(context).getProduto(linhaFatura.getProdutoId());
+                tvLvFaturaNomeProduto.setText(produto.getNome());
+            }
+            tvLvFaturaQuantidade.setText(linhaFatura.getQuantidade()+"");
             tvLvFaturaPrecoUnitario.setText(linhaFatura.getValorUnitario()+"€");
             tvLvFaturaTotal.setText(linhaFatura.getTotal()+"€");
             tvLvFaturaSubtotal.setText(linhaFatura.getSubtotal()+"€");
             tvLvFaturaValorIVA.setText(linhaFatura.getValorIva()+"€");
-            tvLvFaturaIVA.setText(linhaFatura.getPercentagemIva());
+            tvLvFaturaIVA.setText(linhaFatura.getPercentagemIva()+"");
         }
     }
 

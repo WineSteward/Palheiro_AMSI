@@ -1,6 +1,7 @@
 package com.example.palheiro;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import com.example.palheiro.adaptadores.CarrinhoAdaptador;
 import com.example.palheiro.listeners.CarrinhoListener;
 import com.example.palheiro.modelo.Carrinho;
+import com.example.palheiro.modelo.Categoria;
 import com.example.palheiro.modelo.LinhaCarrinho;
 import com.example.palheiro.modelo.MetodoExpedicao;
 import com.example.palheiro.modelo.MetodoPagamento;
@@ -84,19 +86,21 @@ public class CarrinhoFragment extends Fragment implements CarrinhoListener
             @Override
             public void onClick(View v)
             {
-                MetodoPagamento metodoPagamentoSelecionado = metodosPagamento.get(spinnerMetodosPagamento.getSelectedItemPosition());
-                MetodoExpedicao metodoExpedicaoSelecionado = metodosExpedicao.get(spinnerMetodosExpedicao.getSelectedItemPosition());
+                MetodoPagamento metodoPagamentoSelecionado = (MetodoPagamento) spinnerMetodosPagamento.getSelectedItem();
+                MetodoExpedicao metodoExpedicaoSelecionado = (MetodoExpedicao) spinnerMetodosExpedicao.getSelectedItem();
+
 
                 if (lvCarrinho.getAdapter() == null || lvCarrinho.getAdapter().getCount() == 0) {
                     Toast.makeText(getContext(), "Carrinho vazio. Adicione itens antes de continuar.", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                if (metodoPagamentoSelecionado == null || metodoExpedicaoSelecionado == null)
-                {
-                    Toast.makeText(getContext(), "Por favor selecione um método de pagamento/expedição", Toast.LENGTH_SHORT).show();
+                if (metodoPagamentoSelecionado == null || metodoPagamentoSelecionado.getId() == -1 ||
+                        metodoExpedicaoSelecionado == null || metodoExpedicaoSelecionado.getId() == -1) {
+                    Toast.makeText(getContext(), "Por favor selecione um método de pagamento/expedição válido", Toast.LENGTH_SHORT).show();
                     return;
                 }
+
                     // Call API to create a fatura
                     SingletonPalheiro.getInstance(getContext()).postFaturaAPI(getContext(), metodoPagamentoSelecionado, metodoExpedicaoSelecionado, etCupao.getText().toString());
             }
@@ -106,11 +110,14 @@ public class CarrinhoFragment extends Fragment implements CarrinhoListener
     }
 
     @Override
-    public void onRefreshCarrinho(ArrayList<LinhaCarrinho> linhasCarrinho)
+    public void onRefreshCarrinho(Carrinho carrinho)
     {
-        if(linhasCarrinho != null)
+        if(carrinho != null)
         {
-            carrinhoAdapter = new CarrinhoAdaptador(getContext(), linhasCarrinho);
+            tvTotalCarrinho.setText(carrinho.getTotal()+"€");
+
+            carrinhoAdapter = new CarrinhoAdaptador(getContext(), carrinho.getLinhasCarrinho());
+
             lvCarrinho.setAdapter(carrinhoAdapter);
         }
     }
@@ -118,7 +125,23 @@ public class CarrinhoFragment extends Fragment implements CarrinhoListener
     @Override
     public void onRefreshMetodosPagamento(ArrayList<MetodoPagamento> metodosPagamento, Context context)
     {
-        ArrayAdapter<MetodoPagamento> MetodoPagamentoAdaptador = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, metodosPagamento);
+        MetodoPagamento defaultMetodoPag = new MetodoPagamento(-1, "Selecione um método pagamento");
+        metodosPagamento.add(0, defaultMetodoPag);
+
+        ArrayAdapter<MetodoPagamento> MetodoPagamentoAdaptador = new ArrayAdapter<MetodoPagamento>(context, android.R.layout.simple_spinner_item, metodosPagamento) {
+            @Override
+            public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                // Inflate the dropdown view and customize the text color
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView textView = (TextView) view.findViewById(android.R.id.text1);
+                if (textView != null) {
+                    textView.setTextColor(Color.BLACK);  // Set the dropdown item text color
+                }
+                view.setBackgroundColor(Color.WHITE);
+                return view;
+            }
+        };
+
         MetodoPagamentoAdaptador.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerMetodosPagamento.setAdapter(MetodoPagamentoAdaptador);
     }
@@ -126,7 +149,22 @@ public class CarrinhoFragment extends Fragment implements CarrinhoListener
     @Override
     public void onRefreshMetodosExpedicao(ArrayList<MetodoExpedicao> metodosExpedicao, Context context)
     {
-        ArrayAdapter<MetodoExpedicao> MetodoExpedicaoAdaptador = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, metodosExpedicao);
+        MetodoExpedicao defaultMetodoExp = new MetodoExpedicao(-1, "Selecione um método expedição");
+        metodosExpedicao.add(0, defaultMetodoExp);
+
+        ArrayAdapter<MetodoExpedicao> MetodoExpedicaoAdaptador = new ArrayAdapter<MetodoExpedicao>(context, android.R.layout.simple_spinner_item, metodosExpedicao) {
+            @Override
+            public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                // Inflate the dropdown view and customize the text color
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView textView = (TextView) view.findViewById(android.R.id.text1);
+                if (textView != null) {
+                    textView.setTextColor(Color.BLACK);  // Set the dropdown item text color
+                }
+                view.setBackgroundColor(Color.WHITE);
+                return view;
+            }
+        };
         MetodoExpedicaoAdaptador.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerMetodosExpedicao.setAdapter(MetodoExpedicaoAdaptador);
     }
@@ -138,6 +176,7 @@ public class CarrinhoFragment extends Fragment implements CarrinhoListener
         {
             tvTotalCarrinho.setText(value+"€");
             Toast.makeText(context, "Cupão aplicado com sucesso", Toast.LENGTH_SHORT).show();
+            return;
         }
             Toast.makeText(context, "Cupão Inválido", Toast.LENGTH_SHORT).show();
             //if not valid display a toast saying the cupon is not valid
@@ -154,8 +193,8 @@ public class CarrinhoFragment extends Fragment implements CarrinhoListener
 
         Toast.makeText(context, "Compra concluída com sucesso", Toast.LENGTH_SHORT).show();
 
-        //fechar fragment e abrir outro
-        Fragment newFragment = new ProdutosFragment();
+        //fragment reset
+        Fragment newFragment = new CarrinhoFragment();
         getParentFragmentManager()
                 .beginTransaction()
                 .replace(R.id.contentFragment, newFragment)

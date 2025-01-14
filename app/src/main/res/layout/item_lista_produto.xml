@@ -1,83 +1,63 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/background">
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@color/background"
+    android:padding="8dp">
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="10dp" />
+    <ImageView
+        android:id="@+id/ivProdutoLista"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:layout_weight="0.4"
+        android:scaleType="centerCrop"
+        tools:srcCompat="@tools:sample/avatars" />
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.6"
+        android:orientation="vertical"
+        android:gravity="center_vertical"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp">
 
-        <Space
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/tvNomeProduto"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.05" />
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:text="@string/nomeProdutoLista" />
 
-        <ImageView
-            android:id="@+id/ivProdutoLista"
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/tvPrecoProduto"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.4"
-            android:layout_gravity="center"
-            tools:srcCompat="@tools:sample/avatars" />
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:text="@string/precoProdutoLista" />
 
-        <Space
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/tvMarcaProduto"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.05" />
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.6"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tvNomeProduto"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="start"
-                android:text="@string/nomeProdutoLista" />
-
-            <TextView
-                android:id="@+id/tvPrecoProduto"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/precoProdutoLista" />
-
-            <TextView
-                android:id="@+id/tvMarcaProduto"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="bottom"
-                android:text="@string/marcaProdutoLista" />
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/btnItemProdutoAdicionar"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@string/txtItemProdutoAdicionar"
-            android:textSize="12sp"
-            android:layout_gravity="center"
-            android:layout_weight="0.4"
-            android:layout_marginEnd="10dp" />
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:text="@string/marcaProdutoLista" />
     </LinearLayout>
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="10dp" />
+    <Button
+        android:id="@+id/btnItemProdutoAdicionar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.4"
+        android:text="@string/txtItemProdutoAdicionar"
+        android:textSize="12sp"
+        android:layout_gravity="center"
+        android:focusable="false"
+        android:focusableInTouchMode="false" />
 
 </LinearLayout>

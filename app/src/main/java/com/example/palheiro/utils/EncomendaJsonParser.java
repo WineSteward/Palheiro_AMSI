@@ -25,7 +25,7 @@ public class EncomendaJsonParser
 
                 int id = encomendaComprasJson.getInt("id");
                 int estadoEncomenda = encomendaComprasJson.getInt("estadoEncomenda");
-                String data = encomendaComprasJson.getString("data");
+                String data = encomendaComprasJson.getString("dataVenda");
 
                 encomendas.add(new Fatura(id, estadoEncomenda, data));
 

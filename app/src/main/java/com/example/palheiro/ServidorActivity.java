@@ -38,11 +38,11 @@ public class ServidorActivity extends AppCompatActivity implements ServerListene
     public void onClickConnectToServer(View view)
     {
         SingletonPalheiro.getInstance(getApplicationContext()).setIP(etServerIP.getText().toString(), getApplicationContext());
-
     }
 
     @Override
-    public void onUpdateServerIP(Context context) {
+    public void onUpdateServerIP(Context context)
+    {
         Toast.makeText(context, "Server IP estabelecido com sucesso", Toast.LENGTH_SHORT).show();
     }
 }

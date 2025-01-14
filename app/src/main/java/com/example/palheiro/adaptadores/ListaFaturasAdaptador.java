@@ -60,7 +60,7 @@ public class ListaFaturasAdaptador extends BaseAdapter
         if(view == null)
         {
             //carregar o layout com o inflater
-            view = inflater.inflate(R.layout.item_lista_produto, null);
+            view = inflater.inflate(R.layout.item_lista_fatura, null);
         }
 
         //carregar os dados dos produtos, se já tem os ids das componentes entao nao os volta a inicializar
@@ -77,6 +77,7 @@ public class ListaFaturasAdaptador extends BaseAdapter
         return view;
     }
 
+
     //classe auxiliar interna
     private class ViewHolderLista
     {
@@ -92,7 +93,7 @@ public class ListaFaturasAdaptador extends BaseAdapter
 
         public void update(Fatura fatura)
         {
-            tvNumeroFatura.setText(fatura.getId());
+            tvNumeroFatura.setText(fatura.getId()+"");
             tvData.setText(fatura.getData());
         }
     }

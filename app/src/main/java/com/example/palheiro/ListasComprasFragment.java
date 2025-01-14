@@ -25,11 +25,11 @@ public class ListasComprasFragment extends Fragment implements ListasComprasList
 
     private ListView lvListasCompras;
     private ArrayList<ListaCompras> listasCompras;
+    private ListasComprasAdaptador adapter;
     private FloatingActionButton fabLista;
     public static final int ADD = 100;
     public static final int EDIT = 200;
     public static final int DELETE = 300;
-
 
     public ListasComprasFragment() {
         // Required empty public constructor
@@ -46,10 +46,15 @@ public class ListasComprasFragment extends Fragment implements ListasComprasList
         lvListasCompras = view.findViewById(R.id.lvlistaCompras);
         fabLista = view.findViewById(R.id.fabLista);
 
-        //registar no singleton para obter resposta
+        // Initialize the adapter with an empty list
+        listasCompras = new ArrayList<>();
+        adapter = new ListasComprasAdaptador(getContext(), listasCompras);
+        lvListasCompras.setAdapter(adapter);
+
+        // Register listener in the singleton
         SingletonPalheiro.getInstance(getContext()).setListasComprasListener(this);
 
-        //fazer o pedido ao singleton, garante que é assincrono
+        // Fetch initial data asynchronously
         SingletonPalheiro.getInstance(getContext()).getAllListasComprasAPI(getContext());
 
         lvListasCompras.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -61,7 +66,7 @@ public class ListasComprasFragment extends Fragment implements ListasComprasList
             }
         });
 
-        fabLista.setOnClickListener(new View.OnClickListener() { //clicar no +
+        fabLista.setOnClickListener(new View.OnClickListener() { // Click on +
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), DetalhesListaComprasActivity.class);
@@ -76,19 +81,21 @@ public class ListasComprasFragment extends Fragment implements ListasComprasList
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        //listView Atualizada
+        // Refresh ListView
         SingletonPalheiro.getInstance(getContext()).getAllListasComprasAPI(getContext());
 
-        if(requestCode == ADD)
+        if (requestCode == ADD)
             Toast.makeText(getContext(), "Lista Compras Adicionada com sucesso", Toast.LENGTH_SHORT).show();
-        else
+        else if (requestCode == EDIT)
             Toast.makeText(getContext(), "Lista Compras Editada com sucesso", Toast.LENGTH_SHORT).show();
-
     }
 
     @Override
     public void onRefreshListasCompras(ArrayList<ListaCompras> listasCompras) {
-        if(listasCompras != null)
-            lvListasCompras.setAdapter(new ListasComprasAdaptador(getContext(), listasCompras));
+        if (listasCompras != null) {
+            this.listasCompras.clear();
+            this.listasCompras.addAll(listasCompras);
+            adapter.notifyDataSetChanged();
+        }
     }
 }

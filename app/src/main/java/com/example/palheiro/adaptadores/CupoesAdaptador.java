@@ -28,17 +28,17 @@ public class CupoesAdaptador extends BaseAdapter
 
     @Override
     public int getCount() {
-        return 0;
+        return cupoes.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return null;
+        return cupoes.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return position;
     }
 
     @Override //por cada produto este metodo é executado

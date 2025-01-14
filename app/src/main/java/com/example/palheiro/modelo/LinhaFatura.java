@@ -6,6 +6,7 @@ public class LinhaFatura
 {
     private int id, quantidade, percentagemIva, produtoId, faturaId;
     private double total, valorUnitario, valorIva, subtotal;
+    private boolean isDiscountLine;
 
     public LinhaFatura(int id, int quantidade, int percentagemIva, double total, double valorUnitario, double valorIva, double subtotal, int faturaId, int produtoId) {
         this.id = id;
@@ -17,6 +18,27 @@ public class LinhaFatura
         this.subtotal = subtotal;
         this.faturaId = faturaId;
         this.produtoId = produtoId;
+    }
+
+    public LinhaFatura(int id, int quantidade, int percentagemIva, double total, double valorUnitario, double valorIva, double subtotal, int faturaId, int produtoId, boolean isDiscountLine) {
+        this.id = id;
+        this.quantidade = quantidade;
+        this.percentagemIva = percentagemIva;
+        this.total = total;
+        this.valorUnitario = valorUnitario;
+        this.valorIva = valorIva;
+        this.subtotal = subtotal;
+        this.faturaId = faturaId;
+        this.produtoId = produtoId;
+        this.isDiscountLine = isDiscountLine;
+    }
+
+    public boolean isDiscountLine() {
+        return isDiscountLine;
+    }
+
+    public void setDiscountLine(boolean discountLine) {
+        isDiscountLine = discountLine;
     }
 
     public int getId() {

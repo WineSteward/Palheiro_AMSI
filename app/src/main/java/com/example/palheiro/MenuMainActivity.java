@@ -17,6 +17,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.example.palheiro.modelo.SingletonPalheiro;
 import com.google.android.material.navigation.NavigationView;
 
 public class MenuMainActivity extends AppCompatActivity implements  NavigationView.OnNavigationItemSelectedListener
@@ -25,7 +26,7 @@ public class MenuMainActivity extends AppCompatActivity implements  NavigationVi
     private NavigationView navigationView;
     private DrawerLayout drawer;
     private FragmentManager fragmentManager;
-    private String username;
+    private String username, token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +47,10 @@ public class MenuMainActivity extends AppCompatActivity implements  NavigationVi
         toggle.syncState();
 
         drawer.addDrawerListener(toggle);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("DADOS_USER", Context.MODE_PRIVATE);
+        token = sharedPreferences.getString("token", "Sem token");
+        SingletonPalheiro.getInstance(getApplicationContext()).setTOKEN(token, getApplicationContext());
 
         carregarCabecalho();
 
@@ -133,7 +138,7 @@ public class MenuMainActivity extends AppCompatActivity implements  NavigationVi
             setTitle(item.getTitle());
 
         }
-        else if(item.getItemId()== R.id.navPerfil)
+        else if(item.getItemId()== R.id.navCupoes)
         {
             fragment = new CupoesFragment();
 

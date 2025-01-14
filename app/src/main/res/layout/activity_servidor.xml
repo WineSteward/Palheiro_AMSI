@@ -8,7 +8,6 @@
     android:orientation="vertical"
     android:gravity="center"
     android:padding="16dp"
-    android:background="#FFFFFF"
     tools:context=".ServidorActivity">
 
     <TextView
@@ -25,6 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/txtIPExample"
+        android:textColor="@color/black"
         android:inputType="text"
         android:padding="12dp"
         android:background="@android:drawable/editbox_background"

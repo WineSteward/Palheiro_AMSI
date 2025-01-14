@@ -23,7 +23,7 @@ public class CarrinhoJsonParser
             ArrayList<LinhaCarrinho> linhasCarrinho = new ArrayList<>();
 
             //region - linhasCarrinho json parser
-            JSONArray linhasCarrinhoJsonArray = carrinhoJson.getJSONArray("linhasCarrinho");
+            JSONArray linhasCarrinhoJsonArray = carrinhoJson.getJSONArray("linhascarrinho");
 
             // Iterate through the JSONArray
             for (int j = 0; j < linhasCarrinhoJsonArray.length(); j++) {
@@ -35,12 +35,12 @@ public class CarrinhoJsonParser
                     // Extract fields from the JSON object
                     int linhaCarrinhoID = linhaCarrinhoJson.getInt("id");
                     int linhaCarrinhoQuantidade = linhaCarrinhoJson.getInt("quantidade");
-                    float linhaCarrinhoPrecoUnitario = linhaCarrinhoJson.getInt("precoUnitario");
-                    float linhaCarrinhoTotal = linhaCarrinhoJson.getInt("total");
+                    float linhaCarrinhoPrecoUnitario = (float) linhaCarrinhoJson.getDouble("precoUnitario");
+                    float linhaCarrinhoTotal = (float) linhaCarrinhoJson.getDouble("total");
 
 
                     JSONObject linhaCarrinhoProdutoJson = linhaCarrinhoJson.getJSONObject("produto");
-                    Produto linhaCarrinhoProduto = ProdutoJsonParser.parserJsonProduto(linhaCarrinhoProdutoJson);
+                    Produto linhaCarrinhoProduto = ProdutoJsonParser.parserJsonProdutoSimple(linhaCarrinhoProdutoJson);
 
                     // Create a linhaCarrinho
                     LinhaCarrinho linhaCarrinho = new LinhaCarrinho(linhaCarrinhoID, linhaCarrinhoPrecoUnitario, linhaCarrinhoTotal, linhaCarrinhoQuantidade, linhaCarrinhoProduto);

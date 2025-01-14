@@ -48,12 +48,18 @@ public class FaturaJsonParser
                     double linhaFaturaSubtotal = linhaFaturaJson.getDouble("subtotal");
                     double linhaFaturaValorIVA = linhaFaturaJson.getDouble("valorIva");
                     int linhaFaturaIva = linhaFaturaJson.getInt("porcentagemIva");
-                    int linhaFaturaProdutoId = linhaFaturaJson.getInt("produto_id");
+
+                    int linhaFaturaProdutoId = linhaFaturaJson.has("produto_id") && !linhaFaturaJson.isNull("produto_id")
+                            ? linhaFaturaJson.getInt("produto_id")
+                            : 0; // 0 for discount line
+
+                    // Check if it's a discount line (no product ID, or ID is 0/other special value)
+                    boolean isDiscountLine = (linhaFaturaProdutoId == 0); // Assuming 0 for discount lines
 
                     LinhaFatura linhaFatura = new LinhaFatura(
-                            linhaFaturaID, linhaFaturaQuantidade, linhaFaturaIva, linhaFaturaTotal,
-                            linhaFaturaValorUnitario, linhaFaturaValorIVA, linhaFaturaSubtotal,
-                            faturaId, linhaFaturaProdutoId
+                    linhaFaturaID, linhaFaturaQuantidade, linhaFaturaIva, linhaFaturaTotal,
+                    linhaFaturaValorUnitario, linhaFaturaValorIVA, linhaFaturaSubtotal,
+                    faturaId, linhaFaturaProdutoId, isDiscountLine
                     );
 
                     linhasFatura.add(linhaFatura);

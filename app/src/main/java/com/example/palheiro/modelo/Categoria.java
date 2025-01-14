@@ -1,5 +1,7 @@
 package com.example.palheiro.modelo;
 
+import androidx.annotation.NonNull;
+
 public class Categoria
 {
 
@@ -25,5 +27,11 @@ public class Categoria
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return this.getNome();
     }
 }

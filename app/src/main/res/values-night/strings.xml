@@ -54,7 +54,7 @@
     <string name="txtAddItemCarrinho">+</string>
     <string name="txtSubItemCarrinho">-</string>
     <string name="txtLabelMetodoPagamento">Selecione o Método de Pagamento</string>
-    <string name="txtLabelMetodoExpedicao">Selecione o Método de Expedção</string>
+    <string name="txtLabelMetodoExpedicao">Selecione o Método de Expedição</string>
     <string name="txtLabelCupao">Cupão:</string>
     <string name="txtHintCupao">codigoCupao2025</string>
     <string name="txtBtnComprar">Concluir Compra</string>
