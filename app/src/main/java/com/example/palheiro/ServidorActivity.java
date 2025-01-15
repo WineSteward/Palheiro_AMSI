@@ -32,7 +32,6 @@ public class ServidorActivity extends AppCompatActivity implements ServerListene
         etServerIP = findViewById(R.id.etServerIP);
         btnConnectToServer = findViewById(R.id.btnSubmitServerIP);
 
-
     }
 
     public void onClickConnectToServer(View view)
@@ -44,5 +43,6 @@ public class ServidorActivity extends AppCompatActivity implements ServerListene
     public void onUpdateServerIP(Context context)
     {
         Toast.makeText(context, "Server IP estabelecido com sucesso", Toast.LENGTH_SHORT).show();
+        finish();
     }
 }

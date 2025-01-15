@@ -2,6 +2,7 @@ package com.example.palheiro;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Patterns;
@@ -89,19 +90,32 @@ public class SignInActivity extends AppCompatActivity implements AuthListener
     @Override
     public void onUpdateSignin(Context context, String response)
     {
-        if(Objects.equals(response, "success"))
-        {
-            Toast.makeText(this, "Registo realizado com sucecsso", Toast.LENGTH_SHORT).show();
+        switch (response) {
+            case "username":
+                etUsername.setError("Username já está em uso.");
+                return;
+            case "email":
+                etEmail.setError("Email já está em uso.");
+                return;
+            case "NIF":
+                    etNIF.setError("NIF já está em uso.");
+                return;
+            case "error":
+                Toast.makeText(context, "Erro, tente novamente mais tarde.", Toast.LENGTH_SHORT).show();
+                return;
+            default:
+                SharedPreferences sharedPref = getSharedPreferences("DADOS_USER", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putString("token", response);
+                editor.apply(); //save assincrono
 
-            Intent intent = new Intent(this, MenuMainActivity.class);
-            intent.putExtra(USERNAME, txtUsername);
-            startActivity(intent);
-            finish(); //impossivel retornar a esta atividade
-        } else
-        {
-            Toast.makeText(this, "Algo correu mal tente novamente", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Registo realizado com sucecsso", Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(this, MenuMainActivity.class);
+                intent.putExtra(USERNAME, txtUsername);
+                startActivity(intent);
+                finish(); //impossivel retornar a esta atividade
         }
-
     }
 
 

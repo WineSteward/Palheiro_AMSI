@@ -46,15 +46,12 @@ public class ListasComprasFragment extends Fragment implements ListasComprasList
         lvListasCompras = view.findViewById(R.id.lvlistaCompras);
         fabLista = view.findViewById(R.id.fabLista);
 
-        // Initialize the adapter with an empty list
         listasCompras = new ArrayList<>();
         adapter = new ListasComprasAdaptador(getContext(), listasCompras);
         lvListasCompras.setAdapter(adapter);
 
-        // Register listener in the singleton
         SingletonPalheiro.getInstance(getContext()).setListasComprasListener(this);
 
-        // Fetch initial data asynchronously
         SingletonPalheiro.getInstance(getContext()).getAllListasComprasAPI(getContext());
 
         lvListasCompras.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -86,9 +83,9 @@ public class ListasComprasFragment extends Fragment implements ListasComprasList
 
         if (requestCode == ADD)
             Toast.makeText(getContext(), "Lista Compras Adicionada com sucesso", Toast.LENGTH_SHORT).show();
-        else if (requestCode == EDIT)
-            Toast.makeText(getContext(), "Lista Compras Editada com sucesso", Toast.LENGTH_SHORT).show();
-    }
+        else
+            Toast.makeText(getContext(), "Operação executada com sucesso", Toast.LENGTH_SHORT).show();
+        }
 
     @Override
     public void onRefreshListasCompras(ArrayList<ListaCompras> listasCompras) {

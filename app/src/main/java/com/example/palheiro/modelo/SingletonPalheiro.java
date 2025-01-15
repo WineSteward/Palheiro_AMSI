@@ -68,8 +68,8 @@ public class SingletonPalheiro
     private ListaCompras listaCompras;
     private UserProfile profile;
 
-    private static String IP = "http://192.168.1.71/palheiroAPI/backend/web/";
-    // "172.22.21.209"; //IP do servidor
+    private static String IP = "http://192.168.1.178/palheiro/backend/web/";
+    // "http://172.22.21.209/palheiro/backend/web/"; //IP do servidor
 
     //region - API endpoits
     public static final String mURLAPIProdutos = IP + "api/produto/";
@@ -183,6 +183,11 @@ public class SingletonPalheiro
         IP = newIP;
         if(serverListener != null)
             serverListener.onUpdateServerIP(context);
+    }
+
+    public String getIP()
+    {
+        return IP;
     }
 
     public void setTOKEN(String newToken, Context context)
@@ -403,7 +408,9 @@ public class SingletonPalheiro
                 if (listasComprasListener != null) {
                     listasComprasListener.onRefreshListasCompras(listasCompras);
                 }
-            } else {
+            }
+            else
+            {
                 JsonArrayRequest reqSelect = new JsonArrayRequest(Request.Method.GET, mURLAPIListaCompras + "all?access-token=" + TOKEN, null, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -415,7 +422,7 @@ public class SingletonPalheiro
                         addListasComprasBD(listasCompras);
 
                         //atualizar a vista
-                        if (listaComprasListener != null) {
+                        if (listasComprasListener != null) {
                             listasComprasListener.onRefreshListasCompras(listasCompras);
                         }
                     }
@@ -495,10 +502,10 @@ public class SingletonPalheiro
                     throw new RuntimeException(e);
                 }
 
-                StringRequest reqUpdate = new StringRequest(Request.Method.PUT, mURLAPIListaCompras+"id/"+listaCompras.getId()+"?access-token="+TOKEN, new Response.Listener<String>() {
+                JsonObjectRequest reqUpdate = new JsonObjectRequest(Request.Method.PUT, mURLAPIListaCompras+"id/" + listaCompras.getId() + "?access-token="+TOKEN, listaCompraJson, new Response.Listener<JSONObject>() {
                     @Override
-                    public void onResponse(String response) {
-
+                    public void onResponse(JSONObject response)
+                    {
                         //handle success call to API
                         editListaComprasBD(listaCompras);
 
@@ -526,7 +533,7 @@ public class SingletonPalheiro
             }
             else
             {
-                StringRequest reqDelete = new StringRequest(Request.Method.DELETE, mURLAPIListaCompras+"/"+listaCompras.getId()+"?access-token="+TOKEN, new Response.Listener<String>() {
+                StringRequest reqDelete = new StringRequest(Request.Method.DELETE, mURLAPIListaCompras+"id/"+listaCompras.getId()+"?access-token="+TOKEN, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
 
@@ -542,6 +549,7 @@ public class SingletonPalheiro
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+
                         Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
 
                     }
@@ -941,9 +949,10 @@ public class SingletonPalheiro
             }
 
 
-            JsonObjectRequest reqInsert = new JsonObjectRequest(Request.Method.POST, mURLAPIProfile+"/new",profileJson, new Response.Listener<JSONObject>() {
+            JsonObjectRequest reqInsert = new JsonObjectRequest(Request.Method.POST, mURLAPIProfile+"new", profileJson, new Response.Listener<JSONObject>() {
                 @Override
-                public void onResponse(JSONObject response) {
+                public void onResponse(JSONObject response)
+                {
                     //handle success call to API
 
                     String res;
@@ -963,17 +972,7 @@ public class SingletonPalheiro
                     //something went wrong
                     Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
                 }
-            })
-            {
-                @Nullable
-                @Override
-                protected Map<String, String> getParams()
-                {
-                    Map<String, String> params = new HashMap<>();
-                    params.put("access-token", TOKEN);
-                    return params;
-                }
-            };
+            });
             volleyQueue.add(reqInsert);
         }
     }
