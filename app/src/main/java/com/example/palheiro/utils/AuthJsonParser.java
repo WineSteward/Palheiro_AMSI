@@ -5,15 +5,13 @@ import org.json.JSONObject;
 
 public class AuthJsonParser
 {
-    public static String parserJsonLogin(String response)
+    public static String parserJsonLogin(JSONObject response)
     {
         String token = null;
 
         try
         {
-            JSONObject loginJson = new JSONObject(response);
-
-            token = loginJson.getString("token");
+            token = response.getString("token");
         }
         catch(JSONException e)
         {

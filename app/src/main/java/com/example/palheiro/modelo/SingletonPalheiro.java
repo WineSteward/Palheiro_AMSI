@@ -68,23 +68,23 @@ public class SingletonPalheiro
     private ListaCompras listaCompras;
     private UserProfile profile;
 
-    private static String IP = "http://192.168.1.178/palheiro/backend/web/";
+    private static String IP = "192.168.1.178";
     // "http://172.22.21.209/palheiro/backend/web/"; //IP do servidor
 
     //region - API endpoits
-    public static final String mURLAPIProdutos = IP + "api/produto/";
-    public static final String mURLAPIProdutoImage = IP + "products/";
-    public static final String mURLAPILogin = IP + "api/auth/login";
-    public static final String mURLAPILogout = IP + "api/auth/logout";
-    public static final String mURLAPIListaCompras = IP + "api/listacompra/";
-    public static final String mURLAPICarrinho = IP + "api/carrinho/";
-    public static final String mURLAPICategoria = IP + "api/categoria/";
-    public static final String mURLAPIFaturas = IP + "api/fatura/";
-    public static final String mURLAPICupoes = IP + "api/cupao/";
-    public static final String mURLAPIMetodosPagamento = IP + "api/metodopagamento/";
-    public static final String mURLAPIMetodosExpedicao = IP + "api/metodoexpedicao/";
-    public static final String mURLAPIEncomendas = IP + "api/encomenda/";
-    public static final String mURLAPIProfile = IP + "api/userprofile/";
+    public static String mURLAPIProdutos = "http://" + IP + "/palheiro/backend/web/api/produto/";
+    public static String mURLAPIProdutoImage = "http://" + IP + "/palheiro/backend/web/products/";
+    public static String mURLAPILogin = "http://" + IP + "/palheiro/backend/web/api/auth/login";
+    public static String mURLAPILogout = "http://" + IP + "/palheiro/backend/web/api/auth/logout";
+    public static String mURLAPIListaCompras = "http://" + IP + "/palheiro/backend/web/api/listacompra/";
+    public static String mURLAPICarrinho = "http://" + IP + "/palheiro/backend/web/api/carrinho/";
+    public static String mURLAPICategoria = "http://" + IP + "/palheiro/backend/web/api/categoria/";
+    public static String mURLAPIFaturas = "http://" + IP + "/palheiro/backend/web/api/fatura/";
+    public static String mURLAPICupoes = "http://" + IP + "/palheiro/backend/web/api/cupao/";
+    public static String mURLAPIMetodosPagamento = "http://" + IP + "/palheiro/backend/web/api/metodopagamento/";
+    public static String mURLAPIMetodosExpedicao = "http://" + IP + "/palheiro/backend/web/api/metodoexpedicao/";
+    public static String mURLAPIEncomendas = "http://" + IP + "/palheiro/backend/web/api/encomenda/";
+    public static String mURLAPIProfile = "http://" + IP + "/palheiro/backend/web/api/userprofile/";
 
     //endregion
     private static RequestQueue volleyQueue = null;
@@ -181,8 +181,26 @@ public class SingletonPalheiro
     public void setIP(String newIP, Context context)
     {
         IP = newIP;
+        updateAPIUrls();
         if(serverListener != null)
             serverListener.onUpdateServerIP(context);
+    }
+
+    private void updateAPIUrls()
+    {
+        mURLAPIProdutos = "http://" + IP + "/palheiro/backend/web/api/produto/";
+        mURLAPIProdutoImage = "http://" + IP + "/palheiro/backend/web/products/";
+        mURLAPILogin = "http://" + IP + "/palheiro/backend/web/api/auth/login";
+        mURLAPILogout = "http://" + IP + "/palheiro/backend/web/api/auth/logout";
+        mURLAPIListaCompras = "http://" + IP + "/palheiro/backend/web/api/listacompra/";
+        mURLAPICarrinho = "http://" + IP + "/palheiro/backend/web/api/carrinho/";
+        mURLAPICategoria = "http://" + IP + "/palheiro/backend/web/api/categoria/";
+        mURLAPIFaturas = "http://" + IP + "/palheiro/backend/web/api/fatura/";
+        mURLAPICupoes = "http://" + IP + "/palheiro/backend/web/api/cupao/";
+        mURLAPIMetodosPagamento = "http://" + IP + "/palheiro/backend/web/api/metodopagamento/";
+        mURLAPIMetodosExpedicao = "http://" + IP + "/palheiro/backend/web/api/metodoexpedicao/";
+        mURLAPIEncomendas = "http://" + IP + "/palheiro/backend/web/api/encomenda/";
+        mURLAPIProfile = "http://" + IP + "/palheiro/backend/web/api/userprofile/";
     }
 
     public String getIP()
@@ -204,20 +222,31 @@ public class SingletonPalheiro
 
     public void loginAPI(Context context, String username, String password)
     {
-        if(! ListaComprasJsonParser.isConnectionInternet(context))
+        if(! isConnectionInternet(context))
         {
             //nao tem ligacao a internet
             Toast.makeText(context, "Sem Internet", Toast.LENGTH_SHORT).show();
         }
-        else {
-            StringRequest reqInsert = new StringRequest(Request.Method.POST, mURLAPILogin, new Response.Listener<String>() {
+        else
+        {
+            JSONObject authJson = new JSONObject();
+            try
+            {
+                authJson.put("username", username);
+                authJson.put("password", password);
+
+            } catch (JSONException e)
+            {
+                throw new RuntimeException(e);
+            }
+
+            JsonObjectRequest reqInsert = new JsonObjectRequest(Request.Method.POST, mURLAPILogin,authJson, new Response.Listener<JSONObject>() {
                 @Override
-                public void onResponse(String response) {
+                public void onResponse(JSONObject response) {
 
                     //handle success call to API
 
                     String token = AuthJsonParser.parserJsonLogin(response);
-
 
                     //atualizar a vista
                     if(authListener != null)
@@ -229,18 +258,7 @@ public class SingletonPalheiro
                     //something went wrong
                     Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
                 }
-            })
-            {
-                @Nullable
-                @Override
-                protected Map<String, String> getParams()
-                {
-                    Map<String, String> params = new HashMap<>();
-                    params.put("username", username);
-                    params.put("password", password);
-                    return params;
-                }
-            };
+            });
             volleyQueue.add(reqInsert);
         }
     }
