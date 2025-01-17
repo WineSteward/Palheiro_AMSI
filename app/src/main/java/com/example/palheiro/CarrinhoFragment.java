@@ -109,18 +109,7 @@ public class CarrinhoFragment extends Fragment implements CarrinhoListener
         return view;
     }
 
-    @Override
-    public void onRefreshCarrinho(Carrinho carrinho)
-    {
-        if(carrinho != null)
-        {
-            tvTotalCarrinho.setText(carrinho.getTotal()+"€");
 
-            carrinhoAdapter = new CarrinhoAdaptador(getContext(), carrinho.getLinhasCarrinho());
-
-            lvCarrinho.setAdapter(carrinhoAdapter);
-        }
-    }
 
     @Override
     public void onRefreshMetodosPagamento(ArrayList<MetodoPagamento> metodosPagamento, Context context)
