@@ -14,23 +14,23 @@
             android:id="@+id/navCarrinho"
             android:icon="@drawable/ic_action_carrinho"/>
 
-        <item android:title="@string/txtNavFaturas"
-            android:id="@+id/navFaturas"
-            android:icon="@drawable/ic_action_fatura"/>
-
         <item android:title="@string/txtNavEncomendas"
             android:id="@+id/navEncomendas"
             android:icon="@drawable/ic_action_encomenda"/>
-
-        <item android:title="@string/txtCupoesMenu"
-            android:id="@+id/navCupoes"
-            android:icon="@drawable/ic_action_cupao"/>
 
 
         <item android:title="@string/txtNavPerfil"
             android:id="@+id/navPerfil"
             android:icon="@drawable/ic_action_perfil"/>
 
+        <item
+            android:id="@+id/navFaturas"
+            android:icon="@drawable/ic_action_fatura"
+            android:title="@string/txtNavFaturas" />
+        <item
+            android:id="@+id/navCupoes"
+            android:icon="@drawable/ic_action_cupao"
+            android:title="@string/txtCupoesMenu" />
         <item android:title="@string/txtNavListasCompras"
             android:id="@+id/navListasCompras"
             android:icon="@drawable/ic_action_lista"/>
