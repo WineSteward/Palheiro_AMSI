@@ -36,6 +36,7 @@ public class ServidorActivity extends AppCompatActivity implements ServerListene
 
     public void onClickConnectToServer(View view)
     {
+        // Update the server IP in the Singleton
         SingletonPalheiro.getInstance(getApplicationContext()).setIP(etServerIP.getText().toString(), getApplicationContext());
     }
 

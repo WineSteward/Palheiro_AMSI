@@ -69,18 +69,20 @@ public class SignInActivity extends AppCompatActivity implements AuthListener
         }
 
         UserProfile profile = new UserProfile(txtPassword, txtNIF, txtMorada, txtMorada2, txtCP, txtUsername, txtEmail);
-
+        // Call the Singleton method to start the sign-in process via the API
         SingletonPalheiro.getInstance(getApplicationContext()).signinUserAPI(getApplicationContext(), profile);
     }
 
     private boolean isPasswordValid(String password)
     {
+        // Check if the password is empty or shorter than 3 characters
         if(Objects.equals(password, ""))
             return false;
 
         return password.length() >= 3;
     }
 
+    // Helper method to validate email format using Android's email pattern utility
     private boolean isEmailValid(String email)
     {
         Pattern pattern = Patterns.EMAIL_ADDRESS;
