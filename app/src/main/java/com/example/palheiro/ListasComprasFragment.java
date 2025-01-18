@@ -50,8 +50,10 @@ public class ListasComprasFragment extends Fragment implements ListasComprasList
         adapter = new ListasComprasAdaptador(getContext(), listasCompras);
         lvListasCompras.setAdapter(adapter);
 
+        // Register this fragment as the listener for shopping list events in SingletonPalheiro
         SingletonPalheiro.getInstance(getContext()).setListasComprasListener(this);
 
+        // Fetch all shopping lists from the API
         SingletonPalheiro.getInstance(getContext()).getAllListasComprasAPI(getContext());
 
         lvListasCompras.setOnItemClickListener(new AdapterView.OnItemClickListener() {
