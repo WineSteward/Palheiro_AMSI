@@ -55,11 +55,14 @@ public class ProdutosFragment extends Fragment implements ProdutosListener {
         lvProdutos = view.findViewById(R.id.lvProdutos);
         spinnerCategorias = view.findViewById(R.id.spinnerCategoriasListaProdutos);
 
+        // Set the listener for product-related updates
         SingletonPalheiro.getInstance(getContext()).setProdutosListener(this);
 
+        // Fetch all products and categories from the API
         SingletonPalheiro.getInstance(getContext()).getAllProdutosAPI(getContext());
         SingletonPalheiro.getInstance(getContext()).getAllCategoriasAPI(getContext());
 
+        // Set item click listener for the ListView
         lvProdutos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -80,6 +83,7 @@ public class ProdutosFragment extends Fragment implements ProdutosListener {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
+                // Clear the selected category and filter products
                 selectedCategoria = null;
                 filterAndDisplayProducts();
             }
@@ -99,7 +103,7 @@ public class ProdutosFragment extends Fragment implements ProdutosListener {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 return false;
-            }
+            }// Handle query submission (if needed)
 
             @Override
             public boolean onQueryTextChange(String query) {

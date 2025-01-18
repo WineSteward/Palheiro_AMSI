@@ -86,6 +86,7 @@ public class DetalhesListaComprasActivity extends AppCompatActivity implements L
         String titulo = etTitulo.getText().toString();
         String descricao = etDescricao.getText().toString();
 
+        //checks if descição and titulo have more than 3 caracters
         if(titulo.trim().length() <= 3)
             etTitulo.setError("Titulo Inválido");
         if (descricao.trim().length() <= 3)
@@ -129,7 +130,9 @@ public class DetalhesListaComprasActivity extends AppCompatActivity implements L
                 .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        // Call the API method to remove the shopping list from the server
                         SingletonPalheiro.getInstance(getApplicationContext()).deleteListaComprasAPI(listaCompras, getApplicationContext());
+                        // Remove the shopping list from the local database using its ID
                         SingletonPalheiro.getInstance(getApplicationContext()).deleteListaComprasBD(listaCompras.getId());
                     }
                 })
