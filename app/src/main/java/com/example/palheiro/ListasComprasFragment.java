@@ -56,6 +56,7 @@ public class ListasComprasFragment extends Fragment implements ListasComprasList
         // Fetch all shopping lists from the API
         SingletonPalheiro.getInstance(getContext()).getAllListasComprasAPI(getContext());
 
+        // Set up an item click listener for the ListView
         lvListasCompras.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -65,6 +66,7 @@ public class ListasComprasFragment extends Fragment implements ListasComprasList
             }
         });
 
+        // Set up a click listener for the FloatingActionButton
         fabLista.setOnClickListener(new View.OnClickListener() { // Click on +
             @Override
             public void onClick(View v) {
