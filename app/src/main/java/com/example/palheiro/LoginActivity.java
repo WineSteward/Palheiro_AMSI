@@ -42,12 +42,14 @@ public class LoginActivity extends AppCompatActivity implements AuthListener {
 
         Resources res = getResources();
 
+        // Set this activity as the authentication listener in SingletonPalheiro
         SingletonPalheiro.getInstance(getApplicationContext()).setAuthListener(this);
 
     }
 
     public void onClickLogin(View view)
     {
+        // Retrieve the resources instance (not used in this method, but initialized here)
         Resources res = getResources();
 
         EditText etUsername = findViewById(R.id.etUsername);
@@ -59,7 +61,7 @@ public class LoginActivity extends AppCompatActivity implements AuthListener {
         if(!isPasswordValid(txtPassword))
         {
             etPassword.setError("Credenciais Incorretas");
-            return;
+            return;// Exit the method without proceeding to the login API call
         }
 
         SingletonPalheiro.getInstance(getApplicationContext()).loginAPI(getApplicationContext(), txtUsername, txtPassword);
